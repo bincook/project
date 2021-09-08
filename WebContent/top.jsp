@@ -107,10 +107,10 @@
 	</div>
 	<div id="third">
 		<ul>
-			<li><a href="../third/gayo.jsp">개요</a></li>
-			<li><a href="../third/domestic_status.jsp">국내현황</a></li>
-			<li><a href="../third/world_status.jsp">세계현황</a></li>
-			<li><a href="../third/distance.jsp">거리두기단계</a></li>
+			<li><a href="../covid_status/gayo.jsp">개요</a></li>
+			<li><a href="../covid_status/domestic_status.jsp">국내현황</a></li>
+			<li><a href="../covid_status/world_status.jsp">세계현황</a></li>
+			<li><a href="../covid_status/distance.jsp">거리두기단계</a></li>
 		</ul>
 	</div>
 	
