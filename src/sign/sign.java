@@ -1,11 +1,14 @@
 package sign;
 
-import javax.servlet.http.HttpServletRequest;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+
 
 public class sign {
 	
@@ -15,9 +18,7 @@ public class sign {
 	String port = "3306";
 	String database = "test";
 	Connection conn;
-	
-	public int userid_check(HttpServletRequest request) throws Exception
-	{}
+
 	
 	public void insert_user_info(signDto signD) throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -28,6 +29,7 @@ public class sign {
 		PreparedStatement p1 = conn.prepareStatement(sql);
 		p1.setString(1, signD.getEmail());
 		p1.setString(2, signD.getPassword());
+		
 		p1.executeUpdate();
 		p1.close();conn.close();
 	}
@@ -42,6 +44,7 @@ public class sign {
 		PreparedStatement p1 = conn.prepareStatement(sql);
 		p1.setString(1, signD.getEmail());
 		p1.setString(2, signD.getPassword());
+		
 		ResultSet rs = p1.executeQuery();
 		if(rs.next()) {
 			session.setAttribute("email", rs.getString("email"));
