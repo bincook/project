@@ -1,15 +1,25 @@
 package map.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import map.util.Ignore;
 
 public class ClinicDto {
 	private Integer clinic_id;
+	private String name;
 	private Double longitude;
 	private Double latitude;
 	private String address;
+
+	@Ignore
+	private List<ClinicTimeDto> todayTimeList = new ArrayList<ClinicTimeDto>();
 	
-	public ClinicDto(Integer clinic_id, Double longitude, Double latitude, String address) {
+	
+	public ClinicDto(Integer clinic_id, String name, Double longitude, Double latitude, String address) {
 		super();
 		this.clinic_id = clinic_id;
+		this.name = name;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.address = address;
@@ -38,6 +48,23 @@ public class ClinicDto {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public List<ClinicTimeDto> getTodayTimeList() {
+		return todayTimeList;
+	}
+
+	public void setTodayTimeList(List<ClinicTimeDto> todayTimeList) {
+		if (todayTimeList != null)
+			this.todayTimeList = todayTimeList;
 	}
 
 	@Override
