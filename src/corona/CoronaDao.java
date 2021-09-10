@@ -53,6 +53,37 @@ public class CoronaDao {
 		
 	}
 	
+	public CoronaDto dstatus() throws Exception {
+		
+		String sql="SELECT \r\n" + 
+				"(select infected_count from `covid status` WHERE DATE='2021-09-01')-(select infected_count from `covid status` WHERE DATE='2021-08-31') AS one\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-31')-(select infected_count from `covid status` WHERE DATE='2021-08-30') AS two\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-30')-(select infected_count from `covid status` WHERE DATE='2021-08-29') AS three\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-29')-(select infected_count from `covid status` WHERE DATE='2021-08-28') AS four\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-28')-(select infected_count from `covid status` WHERE DATE='2021-08-27') AS five\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-27')-(select infected_count from `covid status` WHERE DATE='2021-08-26') AS six\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE='2021-08-26')-(select infected_count from `covid status` WHERE DATE='2021-08-25') AS seven\r\n" + 
+				"FROM `covid status` ORDER BY DATE desc LIMIT 1";
+		
+		Statement stmt = conn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		rs.next();
+		
+		CoronaDto dto = new CoronaDto();
+		
+		dto.setOne(rs.getInt("one"));
+		dto.setTwo(rs.getInt("two"));
+		dto.setThree(rs.getInt("three"));
+		dto.setFour(rs.getInt("four"));
+		dto.setFive(rs.getInt("five"));
+		dto.setSix(rs.getInt("six"));
+		dto.setSeven(rs.getInt("seven"));
+		
+		return dto;
+	}
+	
 	
 	
 	

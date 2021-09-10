@@ -81,36 +81,36 @@
 		<ul id="main">
 			<li class="main">확진환자
 				<ul class="sub">
-					<li><%=dto.getInfected_count() %></li>
-					<li><%=dto.getInfected_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getInfected_count()) %></li>
+					<li><%=String.format("%,d",dto.getInfected_count_cha())%>▲</li>
 				</ul>
 			</li>
 			<li class="main">격리해제
 				<ul class="sub">
-					<li><%=dto.getRelease_from_quarantine_count() %></li>
-					<li><%=dto.getRelease_from_quarantine_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count()) %></li>
+					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count_cha()) %>▲</li>
 				</ul>	
 			</li>
 			<li class="main">사망자
 				<ul class="sub">
-					<li><%=dto.getDeaths_count() %></li>
-					<li><%=dto.getDeaths_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getDeaths_count()) %></li>
+					<li><%=String.format("%,d",dto.getDeaths_count_cha()) %>▲</li>
 				</ul>
 			</li>
 			<li class="main">검사진행
 				<ul class="sub">
-					<li><%=dto.getExamine_count() %></li>
-					<li><%=dto.getExamine_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getExamine_count()) %></li>
+					<li><%=String.format("%,d",dto.getExamine_count_cha()) %>▲</li>
 				</ul>
 			</li>
 		</ul>
 	</div>
 	<div id="third">
 		<ul>
-			<li><a href="../third/gayo.jsp">개요</a></li>
-			<li><a href="../third/domestic_status.jsp">국내현황</a></li>
-			<li><a href="../third/world_status.jsp">세계현황</a></li>
-			<li><a href="../third/distance.jsp">거리두기단계</a></li>
+			<li><a href="../covid_status/gayo.jsp">개요</a></li>
+			<li><a href="../covid_status/domestic_status.jsp">국내현황</a></li>
+			<li><a href="../covid_status/world_status.jsp">세계현황</a></li>
+			<li><a href="../covid_status/distance.jsp">거리두기단계</a></li>
 		</ul>
 	</div>
 	
