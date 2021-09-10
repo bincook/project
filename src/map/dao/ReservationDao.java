@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import corona.CoronaDto;
 import map.dto.ClinicDto;
@@ -29,7 +31,7 @@ public class ReservationDao {
 	
 	public List<ClinicDto> findAllClinic() throws Exception {
 		
-		String sql =" select clinic_id, longitude, latitude, address from Clinic";
+		String sql =" select name, clinic_id, longitude, latitude, address from Clinic";
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		List<ClinicDto> list = new ArrayList<ClinicDto>();
@@ -38,6 +40,7 @@ public class ReservationDao {
 			list.add(
 				new ClinicDto (
 					rs.getInt("clinic_id"), 
+					rs.getString("name"),
 					rs.getDouble("longitude"),
 					rs.getDouble("latitude"), 
 					rs.getString("address")
@@ -48,14 +51,52 @@ public class ReservationDao {
 		return list;
 	}
 	
+	public void settingTodayTimeTable(List<ClinicDto> dtos) throws Exception {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=0; i<dtos.size(); i++) {
+			sb.append(dtos.get(i).getClinic_id());
+			
+			
+			if (i < dtos.size() - 1)
+				sb.append(",");
+		}
+		
+		String sql =" select clinic_time_id, clinic_id, start_date, end_date, capacity from `Clinic Time` where clinic_id in (" + sb.toString() + ") and DATE(start_date)  = DATE(NOW())";
+		
+		
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		List<ClinicTimeDto> list = new ArrayList<ClinicTimeDto>();
+		
+		while (rs.next()) {
+			list.add(
+				new ClinicTimeDto (
+					rs.getInt("clinic_time_id"), 
+					rs.getInt("clinic_id"), 
+					rs.getTimestamp("start_date"),
+					rs.getTimestamp("end_date"),
+					rs.getInt("capacity")
+				)
+			);
+		}
+		
+		Map<Integer, List<ClinicTimeDto>> collect = list.stream().collect(Collectors.groupingBy(time -> time.getClinic_id()));
+		
+		dtos.stream().forEach(clinic -> clinic.setTodayTimeList(collect.get(clinic.getClinic_id())));
+
+	}
+	
 	public ClinicDto findClinicById(int id) throws Exception {
-		String sql = "select clinic_id, longitude, latitude, address from Clinic where clinic_id = %d";
+		String sql = "select name, clinic_id, longitude, latitude, address from Clinic where clinic_id = %d";
 		sql = String.format(sql, id);
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		rs.next();
 		ClinicDto dto = new ClinicDto (
 								rs.getInt("clinic_id"), 
+								rs.getString("name"),
 								rs.getDouble("longitude"),
 								rs.getDouble("latitude"), 
 								rs.getString("address")
@@ -76,8 +117,8 @@ public class ReservationDao {
 			dtos.add(
 				new ClinicTimeDto(
 					rs.getInt("clinic_time_id"), 
-					rs.getDate("start_date"),
-					rs.getDate("end_date"), 
+					rs.getTimestamp("start_date"),
+					rs.getTimestamp("end_date"), 
 					rs.getInt("capacity")
 				)
 			);

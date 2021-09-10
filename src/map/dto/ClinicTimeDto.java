@@ -1,14 +1,15 @@
 package map.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import static map.util.Assertions.*;
 
 public class ClinicTimeDto {
 	private Integer clinic_time_id;
 	private Integer clinic_id;
-	private Date start_date;
-	private Date end_date;
+	private Timestamp start_date;
+	private Timestamp end_date;
 	private Integer capacity;
 	
 	public void validateForSave() {
@@ -25,7 +26,13 @@ public class ClinicTimeDto {
 	}
 	
 	
-	public ClinicTimeDto(Integer clinic_time_id, Date start_date, Date end_date, Integer capacity) {
+	
+	public ClinicTimeDto() {
+		super();
+	}
+	
+
+	public ClinicTimeDto(Integer clinic_time_id, Timestamp start_date, Timestamp end_date, Integer capacity) {
 		super();
 		this.clinic_time_id = clinic_time_id;
 		this.start_date = start_date;
@@ -45,16 +52,16 @@ public class ClinicTimeDto {
 	public void setClinic_id(Integer clinic_id) {
 		this.clinic_id = clinic_id;
 	}
-	public Date getStart_date() {
+	public Timestamp getStart_date() {
 		return start_date;
 	}
-	public void setStart_date(Date start_date) {
+	public void setStart_date(Timestamp start_date) {
 		this.start_date = start_date;
 	}
-	public Date getEnd_date() {
+	public Timestamp getEnd_date() {
 		return end_date;
 	}
-	public void setEnd_date(Date end_date) {
+	public void setEnd_date(Timestamp end_date) {
 		this.end_date = end_date;
 	}
 	public Integer getCapacity() {
@@ -64,7 +71,7 @@ public class ClinicTimeDto {
 		this.capacity = capacity;
 	}
 
-	public ClinicTimeDto(Integer clinic_time_id, Integer clinic_id, Date start_date, Date end_date, Integer capacity) {
+	public ClinicTimeDto(Integer clinic_time_id, Integer clinic_id, Timestamp start_date, Timestamp end_date, Integer capacity) {
 		super();
 		this.clinic_time_id = clinic_time_id;
 		this.clinic_id = clinic_id;
