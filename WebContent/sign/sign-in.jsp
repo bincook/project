@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="utf-8" %>
-<% request.setCharacterEncoding("UTF-8"); %>
+
 <html>
 <head>
     <title>sign-in</title>
@@ -14,9 +14,9 @@ body {
 	size: 26px;
 }
 
-#first input[name="member_userid"],
+#first input[name="member_email"],
 #first input[name="member_userpwd"] {
-	width: 150px;
+	width: 200px;
 	height: 26px; 
 	background: white;
 	color: black;
@@ -41,6 +41,22 @@ body {
 </head>
 <body>
 
+<%
+	if(session.getAttribute("email") != null){
+%>
+
+<table>
+  <tr>
+    <td>
+      <%=session.getAttribute("email") %>님 
+      <a href="">로그아웃</a>
+    </td>
+  </tr>
+</table>
+<%
+	}
+	else {
+%>
 <form method="post" action="sign-in_ok.jsp">
 <table id="first" width="225px" align="center">
 
@@ -48,7 +64,7 @@ body {
   
   <tr height="50px">
     <td align="center">
-      <input type="text" name="member_userid" placeholder="아이디">
+      <input type="text" name="member_email" placeholder="이메일 작성 (example@example)">
     </td>
   </tr>
   
@@ -75,15 +91,14 @@ body {
   
   <tr height="10px" style="background: #819ca9;" align="center">
     <td>
-      <a href=""> 아이디 찾기</a>
-      |
-      <a href=""> 비밀번호 찾기</a>
-      |
       <a href="sign-up.jsp"> 회원가입하기</a>
     </td>
   </tr>
   
 </table>
+<%
+	} 
+%>
 </body>
 </html>
 
