@@ -128,7 +128,7 @@ public class ReservationDao {
 	}
 	
 	public List<ReservationDto> findAllReservation() throws Exception {
-		String sql = "select r.reservation_id as reservation_id, " +
+		String sql = "select r.reservation_id as reservation_id, m.email, " +
 				"ci.name as clinic_name, c.start_date as start_date, c.end_date as end_date, " +
 				"r.phone_area_code as phone_area_code, " + 
 				"r.phone_number as phone_number,"+
@@ -148,6 +148,7 @@ public class ReservationDao {
 			dto.setPhone_area_code(rs.getString("phone_area_code"));
 			dto.setPhone_number(rs.getString("phone_number"));
 			dto.setPhone_dialing_code(rs.getString("phone_dialing_code"));
+			dto.setMember_email(rs.getString("email"));
 			dtos.add(dto);
 		}
 		
@@ -157,7 +158,7 @@ public class ReservationDao {
 	}
 	
 	public List<ReservationDto> findAllReservationByMemberId(int member_id) throws Exception {
-		String sql = "select r.reservation_id as reservation_id, " +
+		String sql = "select r.reservation_id as reservation_id, m.email, " +
 				"ci.name as clinic_name, c.start_date as start_date, c.end_date as end_date, " +
 				"r.phone_area_code as phone_area_code, " + 
 				"r.phone_number as phone_number,"+
@@ -177,6 +178,7 @@ public class ReservationDao {
 			dto.setPhone_area_code(rs.getString("phone_area_code"));
 			dto.setPhone_number(rs.getString("phone_number"));
 			dto.setPhone_dialing_code(rs.getString("phone_dialing_code"));
+			dto.setMember_email(rs.getString("email"));
 			dtos.add(dto);
 		}
 		
