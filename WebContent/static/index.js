@@ -1,5 +1,8 @@
-function modalOpen() {
+function modalOpen(isLogin) {
+	
+	var loginText = isLogin ? '로그아웃' : '로그인';
     var html = '';
+
 
     html += '   <div class="modal-blur"></div>'
     html += '    <div class="modal">'
@@ -16,11 +19,11 @@ function modalOpen() {
     html += '        </div>'
     html += '        <div class="modal-content flex flex-direction">'
     html += '            <div class="list">'
-    html += '                <a class="list-item text-decoration-none" href="#">'
+    html += '                <a class="list-item text-decoration-none" href="/sign/sign-in.jsp">'
     html += '                       <svg style="width:24px;height:24px" viewBox="0 0 24 24">'
     html += '                             <path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />'
     html += '                       </svg>'
-    html += '                       <div>목록</div>'
+	html += '                       <div>' + loginText + '</div>'
     html += '                </a>'
     html += '                <a class="list-item text-decoration-none" href="#">'
     html += '                       <svg style="width:24px;height:24px" viewBox="0 0 24 24">'

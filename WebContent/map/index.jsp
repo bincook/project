@@ -8,10 +8,14 @@
 <%@page import="map.dao.TempSession"%>
 
 <%
-	HttpSession tempSession = TempSession.getMemberSession(request);
-	boolean isAdmin = (boolean) tempSession.getAttribute("isAdmin");
-	boolean isLogin = true;
-	int memberId = 2;
+	boolean isAdmin = false;
+	boolean isLogin = (session != null && session.getAttribute("email") != null);
+	int memberId = 0;
+	
+	if (isLogin) {
+		memberId = (int)session.getAttribute("member_id");
+		isAdmin = (boolean) session.getAttribute("isAdmin");
+	}
 	
 	ReservationDao repository = new ReservationDao();
 	List<ClinicDto> list = repository.findAllClinic();

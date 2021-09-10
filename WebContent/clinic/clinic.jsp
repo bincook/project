@@ -7,9 +7,16 @@
 <%@page import="map.dao.TempSession"%>
 
 <%
-	HttpSession tempSession = TempSession.getAdminSession(request);
-	boolean isAdmin = (boolean) tempSession.getAttribute("isAdmin");
-	boolean isLogin = true;
+	
+	
+	boolean isAdmin = false;
+	boolean isLogin = (session != null && session.getAttribute("email") != null);
+	int memberId = 0;
+	
+	if (isLogin) {
+		memberId = (int)session.getAttribute("member_id");
+		isAdmin = (boolean) session.getAttribute("isAdmin");
+	}
 	
 	ReservationDao repository = new ReservationDao();
 	List<ReservationDto> dtos = repository.findAllReservation();
@@ -38,9 +45,12 @@
         	<jsp:include page="/map/index.jsp"/>
         </div>
         
-        <div class="card mb-4-2">
+        
         <% 
         	if (isLogin && isAdmin) {
+     	%>
+     			<div class="card mb-4-2">
+     	<%
         		for (ReservationDto dto : dtos) {
         %>
         
@@ -54,9 +64,12 @@
 	        
         <%
         		}
+     	%>
+     		</div>
+     	<%
        		}
         %>
-        </div>
+        
     </main>
 </div>
 <script src="/static/index.js"></script>

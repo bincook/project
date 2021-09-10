@@ -25,6 +25,9 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="/static/index.js"></script>
 
+<%
+	boolean isLogin = (session != null && session.getAttribute("email") != null);
+%>
 
 <header class="card mb-4-2">
     <div class="menu-title">
@@ -34,9 +37,22 @@
             Covid <span class="error--text">19</span>
         </h2>
         <h2>
-            <button class="icon" type="button" onclick="modalOpen()">
-                <%@ include file="icon/mdi-menu.jsp" %>
-            </button>
+        	<%
+        		if (isLogin) {
+        	%>
+        			<button class="icon" type="button" onclick="modalOpen(true)">
+		                <%@ include file="icon/mdi-menu.jsp" %>
+		            </button>
+        	<%
+        		} else {
+        	%>
+        			<button class="icon" type="button" onclick="modalOpen(false)">
+		                <%@ include file="icon/mdi-menu.jsp" %>
+		            </button>
+        	<%
+        		}
+        	%>
+            
         </h2>
     </div>
     <div class="card-content pt-2 pb-1 text-weight-bold text-center">
