@@ -1,7 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+		 pageEncoding="utf-8" %>
 <%@page import="corona.CoronaDto"%>
 <%@page import="corona.CoronaDao"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -81,26 +81,26 @@
 		<ul id="main">
 			<li class="main">확진환자
 				<ul class="sub">
-					<li><%=dto.getInfected_count() %></li>
-					<li><%=dto.getInfected_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getInfected_count()) %></li>
+					<li><%=String.format("%,d",dto.getInfected_count_cha())%>▲</li>
 				</ul>
 			</li>
 			<li class="main">격리해제
 				<ul class="sub">
-					<li><%=dto.getRelease_from_quarantine_count() %></li>
-					<li><%=dto.getRelease_from_quarantine_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count()) %></li>
+					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count_cha()) %>▲</li>
 				</ul>	
 			</li>
 			<li class="main">사망자
 				<ul class="sub">
-					<li><%=dto.getDeaths_count() %></li>
-					<li><%=dto.getDeaths_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getDeaths_count()) %></li>
+					<li><%=String.format("%,d",dto.getDeaths_count_cha()) %>▲</li>
 				</ul>
 			</li>
 			<li class="main">검사진행
 				<ul class="sub">
-					<li><%=dto.getExamine_count() %></li>
-					<li><%=dto.getExamine_count_cha() %>▲</li>
+					<li><%=String.format("%,d",dto.getExamine_count()) %></li>
+					<li><%=String.format("%,d",dto.getExamine_count_cha()) %>▲</li>
 				</ul>
 			</li>
 		</ul>
