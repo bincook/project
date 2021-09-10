@@ -32,7 +32,7 @@ repository.save(dto);
 
 <script>
 	alert('등록이 완료 되었습니다.');
-	location.href = 'index.jsp';
+	location.href = '/clinic/clinic.jsp';
 </script>
 
 

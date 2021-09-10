@@ -52,7 +52,7 @@
         </div>
 
 
-        <div class="card py-2">
+        <div class="card py-2 mb-4-2">
             <div class="card-content align-items-center text-center">
                 <div>
                     <h6 class="mb-3 tex">오늘 확진자 수</h6>

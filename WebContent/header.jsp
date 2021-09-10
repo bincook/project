@@ -17,9 +17,14 @@
     );
 %>
 
+<!-- w3 css -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<!-- custom css -->
 <link rel="stylesheet" href="/static/index.css">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="/static/index.js"></script>
+
 
 <header class="card mb-4-2">
     <div class="menu-title">

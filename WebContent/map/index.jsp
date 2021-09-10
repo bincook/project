@@ -21,16 +21,31 @@
 <head>
     <title>Index Page</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<style>
 		.time {
 			padding: 8px;
-    		border: 1px solid gray;
+    		border-top: 1px solid rgba(193, 193, 193, 0.314);
+    		border-radius: 15px;
 		}
 		.time:hover {
 			background-color: #f1f1f1;
 			cursor: pointer;
+			border-radius: 15px;
+		}
+		.w3-modal-content {
+			border-radius: 15px;
+		}
+		.w3-button {
+			border-radius: 5px;
+		}
+		.w3-section {
+			padding: 8px;
+		}
+		.w3-container {
+			border-radius: 0 0 15px 15px;
+		}
+		.w3-input {
+			border-radius: 5px;
 		}
 	</style>
 </head>
@@ -51,22 +66,22 @@
 	if (isAdmin) {
 %>
 		<!-- 시간 등록 폼 -->
-      <form class="w3-container" action="./register_clinic_time.jsp">
+      <form class="w3-container" action="/map/register_clinic_time.jsp">
         <div class="w3-section">
 
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="clinic_id" id="clinic_id">
         
         
           <label><b>start date</b></label>
-          <input class="w3-input w3-border w3-margin-bottom" type="date" name="start_date" required>
+          <input style="margin-top: 4px;" class="w3-input w3-border w3-margin-bottom" type="date" name="start_date" required>
           <input class="w3-input w3-border w3-margin-bottom" type="time" name="start_time" required>
           
           <label><b>end date</b></label>
-          <input class="w3-input w3-border w3-margin-bottom" type="date" name="end_date" required>
+          <input style="margin-top: 4px;" class="w3-input w3-border w3-margin-bottom" type="date" name="end_date" required>
           <input class="w3-input w3-border w3-margin-bottom" type="time" name="end_time" required>
           
           <label><b>capacity</b></label>
-          <input class="w3-input w3-border" name="capacity" type="number" placeholder="Enter capacity" required>
+          <input style="margin-top: 4px;" class="w3-input w3-border" name="capacity" type="number" placeholder="Enter capacity" required>
           
           <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">등록</button>
 
@@ -81,21 +96,18 @@
 	} else {
 %>
 		<!-- 시간 예약 폼 -->
-      <form class="w3-container" action="./register_reservation.jsp">
+      <form class="w3-container" action="/map/register_reservation.jsp">
         <div class="w3-section">
 
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="clinic_time_id" id="clinic_time_id">
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="member_id" id="member_id" value="<%=memberId%>">
         
         	<label><b>area code</b></label>
-        	<br />
-          	<input class="w3-input w3-border w3-margin-bottom" type="number" name="phone_area_code" required>
+          	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_area_code" required>
           	<label><b>number</b></label>
-        	<br />
-          	<input class="w3-input w3-border w3-margin-bottom" type="number" name="phone_number" required>
+          	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_number" required>
           	<label><b>dialing code</b></label>
-        	<br />
-          	<input class="w3-input w3-border w3-margin-bottom" type="number" name="phone_dialing_code" required>
+          	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_dialing_code" required>
         	<!-- 정말 이 시간으로 예약 하실래요? -->
 			
 			
@@ -130,7 +142,8 @@
   </div>
 </div>
 
-<div id="map" style="width:100%;height:80vh;"></div>
+<div id="map" style="width:100%;height:500px;border-radius: 20px;"></div>
+
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8865b0b62328d18ad61dcbd299d470b0"></script>
 <script>
@@ -179,7 +192,7 @@ var positions = [
 				    			start_date: '<%=time.getStart_date()%>',
 				    			end_date: '<%=time.getEnd_date()%>',
 				    			capacity: '<%=time.getCapacity()%>'
-				    		}
+				    		},
 			    	<%
 		    			}
 			    	%>
