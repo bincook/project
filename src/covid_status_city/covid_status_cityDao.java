@@ -16,23 +16,43 @@ public class covid_status_cityDao {
 		conn = DriverManager.getConnection(url, "ysj","1234");
 	}
 	
-	public covid_status_cityDto city_list(String city_id) throws Exception {
-		String sql = "select * from `covid status by city` where city_id = ? order by date desc";
+	public ArrayList<covid_status_cityDto> city_list(String city_id) throws Exception {
+		String sql = "select r1.city_id, r1.infected_count, r1.healing_count, r1.deaths_count,";
+		sql = sql + "r3.title, r3.description, r1.infected_rate, r1.date, r2.name_ko ";
+		sql = sql + "from `covid status by city` as r1, `korea city` as r2,	issue as r3 ";
+		sql = sql + "where r1.date = r3.occurrence_date and r1.city_id = r2.city_id and ";
+		sql = sql + "r1.city_id = r3.city_id and r1.city_id = ? order by date desc";
 		
 		PreparedStatement p1 = conn.prepareStatement(sql);
 		p1.setString(1, city_id);
 		ResultSet rs = p1.executeQuery();
 	
+		ArrayList<covid_status_cityDto> list = new ArrayList<covid_status_cityDto>();
+		while(rs.next()) {
+		
+			covid_status_cityDto cscd = new covid_status_cityDto();
+			cscd.setCity_id(rs.getInt("city_id"));
+			cscd.setInfected_count(rs.getInt("infected_count"));
+			cscd.setHealing_count(rs.getInt("healing_count"));
+			cscd.setDeaths_count(rs.getInt("deaths_count"));
+			cscd.setInfected_rate(rs.getInt("infected_rate"));
+			cscd.setDate(rs.getString("date"));
+			cscd.setName_ko(rs.getString("name_ko"));
+			cscd.setTitle(rs.getString("title"));
+			cscd.setDescription(rs.getString("description"));
+		
+			list.add(cscd);
+		}
+		return list;
+	}
+	
+	public void city_name(String city_id) throws Exception {
+		String sql = "select name_ko from `korea city` where city_id = ?";
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		p1.setString(1, city_id);
+		ResultSet rs = p1.executeQuery();
+		
 		rs.next();
 		
-		covid_status_cityDto cscd = new covid_status_cityDto();
-		cscd.setCity_id(rs.getInt("city_id"));
-		cscd.setInfected_count(rs.getInt("infected_count"));
-		cscd.setHealing_count(rs.getInt("healing_count"));
-		cscd.setDeaths_count(rs.getInt("deaths_count"));
-		cscd.setInfected_rate(rs.getInt("infected_rate"));
-		cscd.setDate(rs.getString("date"));
-		
-		return cscd;
 	}
 }

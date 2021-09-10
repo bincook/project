@@ -2,8 +2,26 @@ package covid_status_city;
 
 public class covid_status_cityDto {
 	private int city_id, infected_count, healing_count, deaths_count, infected_rate;
-	private String date;
+	private String date, name_ko, title, description;
 	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getName_ko() {
+		return name_ko;
+	}
+	public void setName_ko(String name_ko) {
+		this.name_ko = name_ko;
+	}
 	public int getCity_id() {
 		return city_id;
 	}
