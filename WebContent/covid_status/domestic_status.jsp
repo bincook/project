@@ -21,8 +21,10 @@
 %>
 
 
+<div align="center"><h3>국내 현황</h3></div>	
+<div id="chartContainer" style="height: 370px; width:700px; padding-top:100px; padding-left:400px;"></div>
 
-<div id="chartContainer" style="height: 370px; width:1000px; padding-top:20px;"></div>
+	
 
 <script>
 
@@ -33,9 +35,9 @@ var D = date.getDate();
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
-	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	theme: "light", // "light1", "light2", "dark1", "dark2"
 	title:{
-		text: "국내 현황"
+		text: ""
 	},
 	axisY: {
 		title: "국내 코로나 발생"
@@ -44,6 +46,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		type: "column",  
 		showInLegend: true, 
 		legendMarkerColor: "red",
+		color: "red",
 		legendText: "국내 코로나",
 		dataPoints: [    
 			{ y: <%=cdto.getSeven()%>,  label: M+"."+(D-6) },
@@ -59,7 +62,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 });
 chart.render();
 
-}
+
 </script>
 
 </div>
