@@ -16,7 +16,7 @@ public class covid_status_cityDao {
 		conn = DriverManager.getConnection(url, "ysj","1234");
 	}
 	
-	public ArrayList<covid_status_cityDto> city_list(String city_id) throws Exception {
+	public ArrayList<covid_status_cityDto> city_list(String city_id, int year, int month) throws Exception {
 		/*
 		 * String sql =
 		 * "select r1.city_id, r1.infected_count, r1.healing_count, r1.deaths_count,";
@@ -31,6 +31,24 @@ public class covid_status_cityDao {
 		 * ResultSet rs = p1.executeQuery();
 		 */
 		
+		
+		String sql = "select covid.*, city.name_ko from `covid status by city` covid LEFT JOIN `korea city` city";
+		sql = sql + " using(city_id)";
+		sql = sql + " where ? <= covid.date and covid.date < ? and covid.city_id = ?";
+		sql = sql + " Order by covid.date asc";
+		
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		if(month != 12) {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, year+"/"+(month+1)+"/01");
+			p1.setString(3, city_id);
+		}
+		else {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, (year+1)+"/1/01");
+			p1.setString(3, city_id);
+		}
+		ResultSet rs = p1.executeQuery();
 		
 		ArrayList<covid_status_cityDto> list = new ArrayList<covid_status_cityDto>();
 		while(rs.next()) {

@@ -1,9 +1,16 @@
 package covid_status_city;
 
 public class covid_status_cityDto {
-	private int city_id, infected_count, healing_count, deaths_count, infected_rate;
+	private int city_id, healing_count, deaths_count, infected_count, infected_rate;
 	private String date, name_ko, title, description;
+
 	
+	public int getInfected_rate() {
+		return infected_rate;
+	}
+	public void setInfected_rate(int infected_rate) {
+		this.infected_rate = infected_rate;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -45,12 +52,6 @@ public class covid_status_cityDto {
 	}
 	public void setDeaths_count(int deaths_count) {
 		this.deaths_count = deaths_count;
-	}
-	public int getInfected_rate() {
-		return infected_rate;
-	}
-	public void setInfected_rate(int infected_rate) {
-		this.infected_rate = infected_rate;
 	}
 	public String getDate() {
 		return date;
