@@ -56,10 +56,26 @@ function pwd_check(){
 	var pwd2 = document.pkc.member_userpwd2.value;
 	if(pwd == pwd2){
 		document.getElementById("pwd_check").innerHTML="<strong style='color:blue;font-size:12px'>사용가능</strong>";
+		return true
 	}
 	else{
 		document.getElementById("pwd_check").innerHTML="<strong style='color:red;font-size:12px'>사용불가능</strong>";
+		return false
 	}
+}
+function check() {
+	
+	var form = document.pkc
+	var checked = pwd_check()
+	
+	console.log(checked)
+	
+	if (checked) {
+		form.submit()
+	} else {
+		return alert('패스워드가 다릅니다')
+	}
+	
 }
 </script>
 </head>
@@ -90,7 +106,7 @@ function pwd_check(){
 
   <tr>
     <td align="center">
-      <button type="submit">회원가입하기</button>
+      <button type="button" onclick="check()">회원가입하기</button>
     </td>
   </tr>
   

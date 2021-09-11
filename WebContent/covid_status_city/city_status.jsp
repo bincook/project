@@ -129,15 +129,28 @@ function cityName(n){
 }
 
 function get_date(n){
-	// var new_URL = window.location.href + "?year=" + [n];
-	// history.pushState(null, null, new_URL);
-	location = window.location.href + '?year=' + [n];
+	
+	var parsedUrl = new URL(window.location.href);
+	//console.log(parsedUrl)
+
+	parsedUrl.searchParams.set('year', n)
+	
+/* 	console.log(parsedUrl.href)
+	console.log('-----------')
+	
+	for (var data of parsedUrl.searchParams.entries()) {
+		console.log(data)
+	} */
+	
+	
 }
 
 function get_date2(n) {
 	// var new_URL = window.location.href + "?month=" + [n];
 	// history.pushState(null, null, new_URL);
-	location = window.location.href + '?month=' + [n];
+	var parsedUrl = new URL(window.location.href);
+	parsedUrl.searchParams.set('month', n)
+	location.href = parsedUrl.href
 }
 /* 
 function get_info1() {
