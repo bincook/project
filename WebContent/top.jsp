@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
-		 pageEncoding="utf-8" %>
+         pageEncoding="utf-8" %>
 <%@page import="corona.CoronaDto"%>
 <%@page import="corona.CoronaDao"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,7 +14,7 @@
 	#first {
 		width:1000px;
 		height:40px;
-		background:gray;
+		background:#696969;
 		margin:auto;
 		
 	}
@@ -27,17 +27,22 @@
 	#second {
 		width:1000px;
 		height:150px;
-		background:pink;
+		background:#696969;
 		margin:auto;
+		color:white;
+		text-align:center;
 	}
 	#second #main >li {
 		list-style-type:none;
 		display:inline-block;
 		font-size:18px;
-		width:200px;
-		padding-left:30px;
+		width:210px;
+		padding-left:20px;
 		padding-top:20px;
 		
+	}
+	#second #main {
+		padding-left:0px;
 	}
 
 	#second .main .sub {
@@ -48,14 +53,18 @@
 		list-style-type:none;
 		padding-top:10px;
 	}
+	#second #count {
+		font-size:25px;
+		font-weight:900;
+	}
 	
 	
 	#third {
 		width:1000px;
 		height:50px;
-		background:green;
 		margin:auto;
 	}
+	
 	#third >ul >li {
 		list-style-type:none;
 		display:inline-block;
@@ -64,6 +73,12 @@
 		width:180px;
 		
 	}
+	a{
+		text-decoration:none;
+		color:blue;
+	}
+	a:hover{color:red; text-decoration:underline;}
+	
 </style>
 </head>
 <body>
@@ -81,35 +96,35 @@
 		<ul id="main">
 			<li class="main">확진환자
 				<ul class="sub">
-					<li><%=String.format("%,d",dto.getInfected_count()) %></li>
+					<li id="count"><%=String.format("%,d",dto.getInfected_count()) %></li>
 					<li><%=String.format("%,d",dto.getInfected_count_cha())%>▲</li>
 				</ul>
 			</li>
 			<li class="main">격리해제
 				<ul class="sub">
-					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count()) %></li>
+					<li id="count"><%=String.format("%,d",dto.getRelease_from_quarantine_count()) %></li>
 					<li><%=String.format("%,d",dto.getRelease_from_quarantine_count_cha()) %>▲</li>
 				</ul>	
 			</li>
 			<li class="main">사망자
 				<ul class="sub">
-					<li><%=String.format("%,d",dto.getDeaths_count()) %></li>
+					<li id="count"><%=String.format("%,d",dto.getDeaths_count()) %></li>
 					<li><%=String.format("%,d",dto.getDeaths_count_cha()) %>▲</li>
 				</ul>
 			</li>
 			<li class="main">검사진행
 				<ul class="sub">
-					<li><%=String.format("%,d",dto.getExamine_count()) %></li>
+					<li id="count"><%=String.format("%,d",dto.getExamine_count()) %></li>
 					<li><%=String.format("%,d",dto.getExamine_count_cha()) %>▲</li>
 				</ul>
 			</li>
 		</ul>
 	</div>
 	<div id="third">
-		<ul>
+		<ul id="main">
 			<li><a href="../covid_status/gayo.jsp">개요</a></li>
 			<li><a href="../covid_status/domestic_status.jsp">국내현황</a></li>
-			<li><a href="../covid_status/world_status.jsp">세계현황</a></li>
+			<li><a href="../covid_status/city_status.jsp">국내도시별현황</a></li>
 			<li><a href="../covid_status/distance.jsp">거리두기단계</a></li>
 		</ul>
 	</div>
