@@ -17,7 +17,7 @@ public class covid_status_cityDto {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getDescription() {
+	public String getDescription() {  
 		return description;
 	}
 	public void setDescription(String description) {
