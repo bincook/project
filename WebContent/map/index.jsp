@@ -23,35 +23,7 @@
 %>
 <html>
 <head>
-    <title>Index Page</title>
-
-	<style>
-		.time {
-			padding: 8px;
-    		border-top: 1px solid rgba(193, 193, 193, 0.314);
-    		border-radius: 15px;
-		}
-		.time:hover {
-			background-color: #f1f1f1;
-			cursor: pointer;
-			border-radius: 15px;
-		}
-		.w3-modal-content {
-			border-radius: 15px;
-		}
-		.w3-button {
-			border-radius: 5px;
-		}
-		.w3-section {
-			padding: 8px;
-		}
-		.w3-container {
-			border-radius: 0 0 15px 15px;
-		}
-		.w3-input {
-			border-radius: 5px;
-		}
-	</style>
+    <title>Covid 19 분석 및 게시판</title>
 </head>
 <body>
 
