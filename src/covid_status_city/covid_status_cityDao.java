@@ -66,4 +66,59 @@ public class covid_status_cityDao {
 		}
 		return list;
 	}
+	
+	public void issue_insert_ok(String city_id, String title, String date, String description, String link) throws Exception {
+		String sql = "INSERT INTO issue (city_id, title, description, link, occurrence_date)";
+		sql = sql + " VALUES (?, ?, ?, ?, ?)";
+		
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		p1.setString(1, city_id);
+		p1.setString(2, title);
+		p1.setString(3, description);
+		p1.setString(4, link);
+		p1.setString(5, date);
+		p1.executeUpdate();
+		p1.close();
+		conn.close();
+	}
+	
+	public void issue_delete_ok(String issue_id) throws Exception {
+		String sql = "DELETE FROM issue WHERE issue_id = ?";
+		
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		p1.setString(1, issue_id);
+		p1.executeUpdate();
+		p1.close();
+		conn.close();
+	}
+	
+	public ArrayList<covid_status_cityDto> issue_list(int year, int month) throws Exception {
+		String sql = "SELECT i1.title, i1.occurrence_date, c1.name_ko, i1.issue_id FROM issue i1 LEFT JOIN `korea city` c1";
+		sql = sql + " using(city_id)";
+		sql = sql + " where ? <= i1.occurrence_date and ? > i1.occurrence_date";
+		
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		if(month != 12) {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, year+"/"+(month+1)+"/01");
+		}
+		else {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, (year+1)+"/1/01");
+		}
+		ResultSet rs = p1.executeQuery();
+		ArrayList<covid_status_cityDto> list = new ArrayList<covid_status_cityDto>();
+		while(rs.next()) {
+		
+			covid_status_cityDto cscd = new covid_status_cityDto();
+			cscd.setName_ko(rs.getString("name_ko"));
+			cscd.setTitle(rs.getString("title"));
+			cscd.setOccurrence_date(rs.getString("occurrence_date"));
+			cscd.setIssue_id(rs.getInt("issue_id"));
+			
+			list.add(cscd);
+		}
+		
+		return list;
+	}
 }

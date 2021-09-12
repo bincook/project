@@ -1,10 +1,15 @@
 package covid_status_city;
 
 public class covid_status_cityDto {
-	private int city_id, healing_count, deaths_count, infected_count, infected_rate;
-	private String date, name_ko, title, description;
-
+	private int city_id, healing_count, deaths_count, infected_count, infected_rate, issue_id;
+	private String date, name_ko, title, description, occurrence_date;
 	
+	public int getIssue_id() {
+		return issue_id;
+	}
+	public void setIssue_id(int issue_id) {
+		this.issue_id = issue_id;
+	}
 	public int getInfected_rate() {
 		return infected_rate;
 	}
@@ -58,5 +63,11 @@ public class covid_status_cityDto {
 	}
 	public void setDate(String date) {
 		this.date = date;
+	}
+	public String getOccurrence_date() {
+		return occurrence_date;
+	}
+	public void setOccurrence_date(String occurrence_date) {
+		this.occurrence_date = occurrence_date;
 	}
 }

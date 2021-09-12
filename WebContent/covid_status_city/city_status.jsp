@@ -154,6 +154,10 @@ table .data_deaths_count #date,
 table .data_infected_rate #date {
 	text-align: center;
 }
+
+table .admin_command {
+	border-top: 1px solid;
+}
 </style>
 <script>
 function cityName(n){
@@ -198,6 +202,14 @@ function get_info(n) {
 	var parsedUrl = new URL(window.location.href);
 	parsedUrl.searchParams.set('chk', n+1);
 	location.href = parsedUrl.href;
+}
+
+function win_open() {
+	open("issue_insert.jsp","","width=450,height=300");
+}
+
+function del_issue() {
+	open("issue_delete.jsp","","width=450,height=300");
 }
 </script>
 </head>
@@ -245,7 +257,6 @@ function get_info(n) {
 <%
 	String yearStr = request.getParameter("year");
 	String monthStr = request.getParameter("month");
-	System.out.println(yearStr);
 	if (yearStr == null ||  monthStr== null) {
 %>
   <tr class="table_date"><!-- 한달치 데이터만 볼 수 있도록 연도와 월만 체크 가능 db에서 꺼내올때 가져올 수 있는가? -->
@@ -479,10 +490,24 @@ function get_info(n) {
       <span> <%=list.get(l).getDate() %></span>
     </td>
   </tr>
+  
 <%		
 		}
+		// if(session.getAttribute("userid")!=null) {
+			// if(session.getAttribute("userid").toString().equals("admin")) {
+%>
+
+<%		
+			//}
+		//}
 	}
 %>
+  <tr class="admin_command">
+    <td colspan="4">
+      <button type="button" onclick="win_open()"> IssueUpdate</button>
+      <button type="button" onclick="del_issue()"> IssueDelete</button>
+    </td>
+  </tr>
 </table>
 
 </body>
