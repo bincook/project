@@ -1,22 +1,24 @@
 package covid_status_city;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;  
 
-public class covid_status_cityDao {
+public class CovidStatusCityDao {
 	
 	Connection conn;
 	
-	public covid_status_cityDao() throws Exception {
+	public CovidStatusCityDao() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://26.168.126.112:3306/guro_project_1";
 		conn = DriverManager.getConnection(url, "ysj","1234");
 	}
 	
-	public ArrayList<covid_status_cityDto> city_list(String city_id, int year, int month) throws Exception {
+	public ArrayList<CovidStatusCityDto> city_list(String city_id, int year, int month) throws Exception {
 		/*
 		 * String sql =
 		 * "select r1.city_id, r1.infected_count, r1.healing_count, r1.deaths_count,";
@@ -32,28 +34,43 @@ public class covid_status_cityDao {
 		 */
 		
 		
-		String sql = "select covid.*, city.name_ko from `covid status by city` covid LEFT JOIN `korea city` city";
-		sql = sql + " using(city_id)";
-		sql = sql + " where ? <= covid.date and covid.date < ? and covid.city_id = ?";
-		sql = sql + " Order by covid.date asc";
+//		SELECT covid.*, city.*
+//		FROM `covid status by city` covid 
+//		left JOIN (SELECT city.*, iss.title, iss.occurrence_date FROM `korea city` city inner JOIN `issue` iss USING(city_id) WHERE iss.city_id = 2 ) city
+//		on covid.date = city.occurrence_date
+//		WHERE '2021/4/1' <= covid.date and covid.date < '2021/5/30' and covid.city_id = 2
+//		Order by covid.date asc
+
+		String sql = new StringBuilder()
+				.append("SELECT covid.*, city.* ")
+				.append("FROM `covid status by city` covid ")
+				.append("left JOIN (SELECT city.*, iss.title, iss.description, iss.occurrence_date FROM `korea city` city inner JOIN `issue` iss USING(city_id) WHERE iss.city_id = ? ) city ")
+				.append("on covid.date = city.occurrence_date ")
+				.append("WHERE ? <= covid.date and covid.date < ? and covid.city_id = ? ")
+				.append("Order by covid.date asc")
+				.toString()
+		;
+		 
 		
+		LocalDate originDate = LocalDate.of(year, month, 1);
+		LocalDate addedMonthDate = originDate.plusMonths(1);
+			
+		
+				
 		PreparedStatement p1 = conn.prepareStatement(sql);
-		if(month != 12) {
-			p1.setString(1, year+"/"+month+"/01");
-			p1.setString(2, year+"/"+(month+1)+"/01");
-			p1.setString(3, city_id);
-		}
-		else {
-			p1.setString(1, year+"/"+month+"/01");
-			p1.setString(2, (year+1)+"/1/01");
-			p1.setString(3, city_id);
-		}
+
+		p1.setString(1, city_id);
+		p1.setDate(2, Date.valueOf(originDate));
+		p1.setDate(3, Date.valueOf(addedMonthDate));
+		p1.setString(4, city_id);
+
 		ResultSet rs = p1.executeQuery();
 		
-		ArrayList<covid_status_cityDto> list = new ArrayList<covid_status_cityDto>();
+		ArrayList<CovidStatusCityDto> list = new ArrayList<CovidStatusCityDto>();
 		while(rs.next()) {
-		
-			covid_status_cityDto cscd = new covid_status_cityDto();
+			
+				
+			CovidStatusCityDto cscd = new CovidStatusCityDto();
 			cscd.setCity_id(rs.getInt("city_id"));
 			cscd.setInfected_count(rs.getInt("infected_count"));
 			cscd.setHealing_count(rs.getInt("healing_count"));
@@ -61,6 +78,8 @@ public class covid_status_cityDao {
 			cscd.setInfected_rate(rs.getInt("infected_rate"));
 			cscd.setDate(rs.getString("date"));
 			cscd.setName_ko(rs.getString("name_ko"));
+			cscd.setTitle(rs.getString("title"));
+			cscd.setDescription(rs.getString("description")); 
 		
 			list.add(cscd);
 		}
@@ -92,7 +111,7 @@ public class covid_status_cityDao {
 		conn.close();
 	}
 	
-	public ArrayList<covid_status_cityDto> issue_list(int year, int month) throws Exception {
+	public ArrayList<CovidStatusCityDto> issue_list(int year, int month) throws Exception {
 		String sql = "SELECT i1.title, i1.occurrence_date, c1.name_ko, i1.issue_id FROM issue i1 LEFT JOIN `korea city` c1";
 		sql = sql + " using(city_id)";
 		sql = sql + " where ? <= i1.occurrence_date and ? > i1.occurrence_date";
@@ -107,10 +126,10 @@ public class covid_status_cityDao {
 			p1.setString(2, (year+1)+"/1/01");
 		}
 		ResultSet rs = p1.executeQuery();
-		ArrayList<covid_status_cityDto> list = new ArrayList<covid_status_cityDto>();
+		ArrayList<CovidStatusCityDto> list = new ArrayList<CovidStatusCityDto>();
 		while(rs.next()) {
 		
-			covid_status_cityDto cscd = new covid_status_cityDto();
+			CovidStatusCityDto cscd = new CovidStatusCityDto();
 			cscd.setName_ko(rs.getString("name_ko"));
 			cscd.setTitle(rs.getString("title"));
 			cscd.setOccurrence_date(rs.getString("occurrence_date"));
@@ -120,5 +139,35 @@ public class covid_status_cityDao {
 		}
 		
 		return list;
+	}
+	
+	public ArrayList<CovidStatusCityDto> showIssue(int year, int month) throws Exception {
+		String sql = "SELECT issue.*, covid.date ";
+		sql = sql + "FROM issue JOIN `covid status by city` AS covid ";
+		sql = sql + "ON issue.occurrence_date = covid.date ";
+		sql = sql + "WHERE ? <= issue.occurrence_date AND ? > issue.occurrence_date";
+		
+		PreparedStatement p1 = conn.prepareStatement(sql);
+		if(month != 12) {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, year+"/"+(month+1)+"/01");
+		}
+		else {
+			p1.setString(1, year+"/"+month+"/01");
+			p1.setString(2, (year+1)+"/1/01");
+		}
+		
+		ResultSet rs = p1.executeQuery();
+		ArrayList<CovidStatusCityDto> ilist = new ArrayList<CovidStatusCityDto>();
+		while(rs.next()) {
+			CovidStatusCityDto dto = new CovidStatusCityDto();
+			dto.setTitle(rs.getString("title"));
+			
+			ilist.add(dto);
+		}
+		
+		//ilist.forEach(System.err::println);
+		
+		return ilist;
 	}
 }

@@ -279,6 +279,7 @@ table .data_deaths_count #date,
 table .data_infected_rate #date {
 	text-align: center;
 	position: relative;
+	z-index: 1;
 }
 
 table .admin_command {
@@ -303,9 +304,13 @@ table .admin_command button:hover {
 .issueOn {
 	position: absolute;
 	width: 500px;
-	height: 300px;
+	height: 30px;
+	top: 0;
+	left: 0;
+
 	background: white;
 	border-radius: 8px;
 	overflow: auto;
-	display:none;
+	display: none;
+	z-index: 3;
 }

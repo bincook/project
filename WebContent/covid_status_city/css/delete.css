@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+}
+
+table {
+	margin: auto;
+}
+
+table td select {
+	width: 120px;
+	height: 40px;
+	font-size: 18px;
+}
+
+table tr:nth-child(1) {
+	margin-bottom: 40px;
+}
+table .no:nth-child(1) {
+	width: 140px;
+	text-align: center;
+}
+
+table .no:nth-child(2) {
+	width: 70px;
+	text-align: center;
+}
+
+table .no:nth-child(3) {
+	width: 500px;
+}
+
+table .no:nth-child(4) {
+	width: 80px;
+	text-align: center;
+}

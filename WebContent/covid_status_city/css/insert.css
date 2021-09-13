@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+	background: #ede7f6;
+}
+
+table {
+	margin: auto;
+}
+
+table tr:nth-child(1) select {
+	width: 250px;
+	height: 40px; 
+}
+
+table tr:nth-child(3) select {
+	width: 100px;
+	height: 40px;
+}
+
+table td input {
+	width: 250px;
+	height: 30px;
+	font-size: 16px;
+}
+
+table tr button {
+	text-align: center;
+}

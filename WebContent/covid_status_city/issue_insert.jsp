@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="css/insert.css">
 <script>
 function chk_info() {
 	/* 유효성 체크 */
@@ -72,21 +73,21 @@ function chk_info() {
     <td> date<br>
       <select name="dateYear">
         <option> 연도</option>
-        <option value="2021">2021</option>
-        <option value="2020">2020</option>
+        <option value="2021">2021년</option>
+        <option value="2020">2020년</option>
       </select>
       
       <select name="dateMonth">
         <option> 월</option>
 <% for(int i = 1;i < 13;i++){ %>
-        <option value="<%=i %>"><%=i %></option>
+        <option value="<%=i %>"><%=i %>월</option>
 <% } %>
       </select>
       
       <select name="dateDay">
         <option value="0"> 일</option>
 <% for(int j = 1;j < 32;j++){ %>
-        <option value="<%=j %>"><%=j %></option>
+        <option value="<%=j %>"><%=j %>일</option>
 <% } %>
       </select>
       

@@ -1,8 +1,9 @@
 package covid_status_city;
 
-public class covid_status_cityDto {
+public class CovidStatusCityDto {
 	private int city_id, healing_count, deaths_count, infected_count, infected_rate, issue_id;
 	private String date, name_ko, title, description, occurrence_date;
+	
 	
 	public int getIssue_id() {
 		return issue_id;
@@ -52,6 +53,16 @@ public class covid_status_cityDto {
 	public void setHealing_count(int healing_count) {
 		this.healing_count = healing_count;
 	}
+	@Override
+	public String toString() {
+		return "covid_status_cityDto [city_id=" + city_id + ", healing_count=" + healing_count + ", deaths_count="
+				+ deaths_count + ", infected_count=" + infected_count + ", infected_rate=" + infected_rate
+				+ ", issue_id=" + issue_id + ", date=" + date + ", name_ko=" + name_ko + ", title=" + title
+				+ ", description=" + description + ", occurrence_date=" + occurrence_date + "]";
+	}
+	
+	
+	
 	public int getDeaths_count() {
 		return deaths_count;
 	}
@@ -70,4 +81,6 @@ public class covid_status_cityDto {
 	public void setOccurrence_date(String occurrence_date) {
 		this.occurrence_date = occurrence_date;
 	}
+	
+	
 }

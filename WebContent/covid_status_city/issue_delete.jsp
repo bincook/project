@@ -8,6 +8,7 @@
 <head>
 <meta charset="EUC-KR">
 <title>Insert title here</title>
+<link rel="stylesheet" href="css/delete.css">
 <script>
 function get_date(n) {
 	location = 'issue_delete.jsp?year=' + [n];
@@ -30,7 +31,7 @@ function get_date1(n){
 	if(yearStr == null || monthStr == null){
 %>
   <tr>
-    <td> 삭제할 날짜<br>
+    <td colspan="4"> <h3>삭제할 날짜</h3><br>
       <select name="dateYear" onchange="javascript:get_date(this.value)">
         <option value="0"> 연도</option>
         <option value="2021">2021년</option>
@@ -53,17 +54,17 @@ function get_date1(n){
 	else {
 %>
   <tr>
-    <td> 삭제할 날짜<br>
+    <td colspan="4"> <h3>삭제할 날짜</h3><br>
       <select name="dateYear" onchange="javascript:get_date(this.value)">
         <option value="0"> 연도</option>
-        <option value="2021">2021</option>
-        <option value="2020">2020</option>
+        <option value="2021">2021년</option>
+        <option value="2020">2020년</option>
       </select>
       
       <select name="dateMonth" onchange="javascript:get_date1(this.value)">
         <option value="0"> 월</option>
 <% for(int i = 1;i < 13;i++){ %>
-        <option value="<%=i %>"><%=i %></option>
+        <option value="<%=i %>"><%=i %>월</option>
 <% } %>
       </select>
 
@@ -87,10 +88,10 @@ function get_date1(n){
 		for(int j = 0;j < list.size();j++){
 %>  
   <tr>
-    <td> <%=list.get(j).getOccurrence_date() %></td>
-    <td> <%=list.get(j).getName_ko() %></td>
-    <td> <%=list.get(j).getTitle() %></td>
-    <td> 
+    <td class="no"> <%=list.get(j).getOccurrence_date() %></td>
+    <td class="no"> <%=list.get(j).getName_ko() %></td>
+    <td class="no"> <%=list.get(j).getTitle() %></td>
+    <td class="no"> 
       <a href="issue_delete_ok.jsp?issue_id=<%=list.get(j).getIssue_id() %>">삭제</a>
     </td>
   </tr>
