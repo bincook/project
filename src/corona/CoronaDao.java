@@ -53,14 +53,9 @@ public class CoronaDao {
 	}
 
 	public List<CoronaDto> findAll() throws Exception {
-		LocalDate now = LocalDate.now();
-		LocalDate monthAgo = now.minusMonths(1);
-
-		String sql = "SELECT * FROM `covid status` WHERE ? <= date and date <= ? ORDER BY date";
+		String sql = "SELECT * FROM `covid status` ORDER BY date";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setDate(1, Date.valueOf(monthAgo));
-		pstmt.setDate(2, Date.valueOf(now));
 
 		ResultSet rs = pstmt.executeQuery();
 

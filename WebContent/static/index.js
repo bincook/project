@@ -1,6 +1,8 @@
+var obj;
+
 function modalOpen(isLogin) {
-	
-	var loginText = isLogin ? '로그아웃' : '로그인';
+
+    var loginText = isLogin ? '로그아웃' : '로그인';
     var html = '';
 
 
@@ -23,7 +25,7 @@ function modalOpen(isLogin) {
     html += '                       <svg style="width:24px;height:24px" viewBox="0 0 24 24">'
     html += '                             <path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />'
     html += '                       </svg>'
-	html += '                       <div>' + loginText + '</div>'
+    html += '                       <div>' + loginText + '</div>'
     html += '                </a>'
     html += '                <a class="list-item text-decoration-none" href="#">'
     html += '                       <svg style="width:24px;height:24px" viewBox="0 0 24 24">'
@@ -57,17 +59,16 @@ function modalClose() {
 
 function getCovidStatus() {
 
-    var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function () {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            var covidStatus = JSON.parse(xhttp.responseText)
-            console.log(covidStatus)
-
-            updateCovidStatus(covidStatus)
-        }
-    };
-    xhttp.open('GET', 'http://localhost:8080/api/covid_status.jsp')
-    xhttp.send()
+    // var xhttp = new XMLHttpRequest()
+    // xhttp.onreadystatechange = function () {
+    //     if (xhttp.readyState === 4 && xhttp.status === 200) {
+    //         var covidStatus = JSON.parse(xhttp.responseText)
+    //
+    //         updateCovidStatus(covidStatus)
+    //     }
+    // };
+    // xhttp.open('GET', 'http://localhost:8080/api/covid_status.jsp')
+    // xhttp.send()
 }
 
 function updateCovidStatus(obj) {
@@ -88,20 +89,65 @@ function updateCovidStatus(obj) {
     healingCount.innerText = obj['healing_count'].toLocaleString();
     examineCount.innerText = obj['examine_count'].toLocaleString();
 
+    var inf = obj['infected_count_cha']
+    var death = obj['deaths_count_cha']
+    var release = obj['release_from_quarantine_count_cha']
+    var exam = obj['examine_count_cha']
 
-    // 증가인지 감소인지 판단여부가 필요해보입니다
-    infectedCountCha.innerText = obj['infected_count_cha'].toLocaleString() + ' ?';
-    deathsCountCha.innerText = obj['deaths_count_cha'].toLocaleString() + ' ?';
-    releaseFromQuarantineCountCha.innerText = obj['release_from_quarantine_count_cha'].toLocaleString() + ' ?';
-    examineCountCha.innerText = obj['examine_count_cha'].toLocaleString() + ' ?';
+    var infStatus = countStatus(inf)
+    var deathStatus = countStatus(death)
+    var releaseStatus = countStatus(release)
+    var examStatus = countStatus(exam)
+
+    infectedCountCha.innerText = infStatus.content;
+    infectedCountCha.classList.add(...infStatus.style)
+
+    deathsCountCha.innerText = deathStatus.content;
+    deathsCountCha.classList.add(...deathStatus.style)
+
+    releaseFromQuarantineCountCha.innerText = releaseStatus.content;
+    releaseFromQuarantineCountCha.classList.add(...releaseStatus.style)
+
+    examineCountCha.innerText = examStatus.content;
+    examineCountCha.classList.add(...examStatus.style)
+
 }
 
-function getCovidStatusMonth() {
+function changeCount(count) {
+    return Math.abs(count).toLocaleString()
+}
+
+function countStatus(count) {
+    switch (true) {
+        case (count < 0):
+            return {
+                style: ['primary--light-1', 'primary--text'],
+                count: changeCount(count),
+                content: changeCount(count) + '↓'
+            }
+        case (count > 0):
+            return {
+                style: ['error--light-1', 'error--text'],
+                count: changeCount(count),
+                content: changeCount(count) + '↑'
+            }
+        default:
+            return {
+                style: ['secondary--light-1', 'secondary--text'],
+                count: changeCount(count),
+                content: changeCount(count) + '-'
+            }
+    }
+}
+
+function getCovidStatusAll() {
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             var covidStatus = JSON.parse(xhttp.responseText)
-            console.log(covidStatus)
+            obj = covidStatus
+
+            document.getElementById('period').disabled = ''
 
             drawMap(covidStatus)
         }
@@ -113,11 +159,54 @@ function getCovidStatusMonth() {
 
 function drawMap(obj) {
 
+    // 일일 확진자 구하기
+    for (let i = 1; i < obj.length; i++) {
+        obj[i]['infected_count_cha'] = obj[i]['infected_count'] - obj[i - 1]['infected_count']
+        obj[i]['examine_count_cha'] = obj[i]['examine_count'] - obj[i - 1]['examine_count']
+        obj[i]['deaths_count_cha'] = obj[i]['deaths_count'] - obj[i - 1]['deaths_count']
+        obj[i]['release_from_quarantine_count_cha'] = obj[i]['release_from_quarantine_count'] - obj[i - 1]['release_from_quarantine_count']
+    }
+
+    var now = moment() // 현재
+    var monthAgo = moment().subtract(1, 'month').add(1, 'days') // 한달 전
+    var objMap = obj.slice(1).map(covid => ({
+        infected_count_cha: covid['infected_count_cha'],
+        date: covid['date']
+    }))
+    var filteredArr = objMap.filter(covid => moment(covid['date']).isBetween(monthAgo, now, undefined, '[]'))
+
+    var nowInfectCountObj = filteredArr[filteredArr.length - 1]
+    var nowInfectCountElem = document.querySelector('.now-infect-count')
+    nowInfectCountElem.innerText = nowInfectCountObj.infected_count_cha.toLocaleString()
+
+    var dayBeforeStatus = countStatus(nowInfectCountObj.infected_count_cha - filteredArr[filteredArr.length - 1 - 1].infected_count_cha)
+    var dayBeforeElem = document.querySelector('.day-before-status')
+    dayBeforeElem.classList.add(...dayBeforeStatus.style)
+    dayBeforeElem.innerText = dayBeforeStatus.content
+
+    var weekAgoStatus = countStatus(nowInfectCountObj.infected_count_cha - filteredArr[filteredArr.length - 1 - 7].infected_count_cha)
+    var weekAgoElem = document.querySelector('.week-ago-status')
+    weekAgoElem.classList.add(...weekAgoStatus.style)
+    weekAgoElem.innerText = weekAgoStatus.content
+
+    var twoWeekAgoStatus = countStatus(nowInfectCountObj.infected_count_cha - filteredArr[filteredArr.length - 1 - 7 * 2].infected_count_cha)
+    var twoWeekAgoElem = document.querySelector('.two-week-ago-status')
+    twoWeekAgoElem.classList.add(...twoWeekAgoStatus.style)
+    twoWeekAgoElem.innerText = twoWeekAgoStatus.content
+
+    var monthAgoStatus = countStatus(nowInfectCountObj.infected_count_cha - filteredArr[0].infected_count_cha)
+    var monthAgoElem = document.querySelector('.month-ago-status')
+    monthAgoElem.classList.add(...monthAgoStatus.style)
+    monthAgoElem.innerText = monthAgoStatus.content
+
+
+    updateCovidStatus(obj[obj.length - 1])
+
     var options = {
         series: [
             {
-                name: '누적 확진자',
-                data: obj.map(covid => covid['infected_count'])
+                name: '일별 확진자',
+                data: filteredArr.map(covid => covid['infected_count_cha'])
             }
         ],
         chart: {
@@ -147,7 +236,7 @@ function drawMap(obj) {
             defaultLocale: "ko"
         },
         title: {
-            text: '누적 감염수',
+            text: '일별 확진자',
             align: 'left'
         },
         dataLabels: {
@@ -158,9 +247,14 @@ function drawMap(obj) {
         },
         xaxis: {
             type: 'datetime',
-            categories: obj.map(covid => new Date(covid['date']).getTime()),
+            categories: filteredArr.map(covid => new Date(covid.date).getTime()),
             labels: {
-                format: 'MM.dd'
+                datetimeFormatter: {
+                    year: 'yyyy',
+                    month: 'yyyy.MMM',
+                    day: 'MMM.dd',
+                    hour: 'HH:mm'
+                }
             },
         },
         yaxis: {
@@ -177,14 +271,147 @@ function drawMap(obj) {
         },
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 }
 
-window.onload = function () {
-    getCovidStatus()
-    getCovidStatusMonth()
+function changeChartData(value) {
+
+    var now = moment() // 현재
+    var monthAgo = moment().subtract(1, 'month').add(1, 'days') // 한달 전
+    var yearAgo = moment().subtract(1, 'year').add(1, 'days')
+
+    switch (value) {
+
+        case 'day':
+            var objMap = obj.slice(1).map(covid => ({
+                infected_count_cha: covid['infected_count_cha'],
+                date: covid['date']
+            })) // return [일일감염자수, 날짜]
+
+            // [ 이상 | ( 초과 | ] 이하 | ) 미만
+            var filteredArr = objMap.filter(covid => moment(covid['date']).isBetween(monthAgo, now, undefined, '[)'))
+            var c = filteredArr.map(covid => new Date(covid.date).getTime())
+            var d = filteredArr.map(covid => covid['infected_count_cha'])
+
+            // 차트 값 변경하기
+            chart.updateOptions({
+                xaxis: {
+                    type: 'datetime',
+                    categories: c,
+                },
+                series: [
+                    {
+                        name: '일별 확진자',
+                        data: d
+                    }
+                ],
+                title: {
+                    text: '일별 확진자',
+                },
+            })
+
+            chart.zoomX(c[0], c[c.length - 1])
+
+            break;
+
+
+        case 'week':
+            var objMap = obj.slice(1).map(covid => ({
+                infected_count_cha: covid['infected_count_cha'],
+                date: covid['date']
+            })) // return [일일감염자수, 날짜]
+            var filteredArr = objMap.filter(covid => moment(covid.date).isBetween(monthAgo, now, undefined, '[]'))
+            var groupByWeek = _.groupBy(filteredArr, (covid) => moment(covid.date).week());
+
+            c = Object.values(groupByWeek).map(covid => new Date(covid[0].date).getTime())
+            d = Object.values(groupByWeek).map(covid => covid[0].infected_count_cha)
+
+            chart.updateOptions({
+                xaxis: {
+                    type: 'datetime',
+                    categories: c,
+                },
+                series: [
+                    {
+                        name: '주별 확진자',
+                        data: d
+                    }
+                ],
+                title: {
+                    text: '주별 확진자',
+                },
+            })
+            chart.zoomX(c[0], c[c.length - 1])
+
+            break;
+
+
+        case 'month':
+            var objMap = obj.slice(1).map(covid => ({
+                infected_count_cha: covid['infected_count_cha'],
+                date: covid['date']
+            })) // return [일일감염자수, 날짜]
+            var filteredArr = objMap.filter(covid => moment(covid.date).isBetween(yearAgo, now, undefined, '[]'))
+            var groupByMonth = _.groupBy(filteredArr, (covid) => moment(covid.date).month());
+            var sortedDataArr = Object.values(groupByMonth)
+                .sort((a, b) => new Date(a[0].date).getTime() - new Date(b[0].date).getTime())
+
+
+            c = sortedDataArr.map(covid => new Date(covid[0].date).getTime())
+            d = sortedDataArr.map(covid => covid[0].infected_count_cha)
+
+            chart.updateOptions({
+                xaxis: {
+                    type: 'datetime',
+                    categories: c
+                },
+                series: [
+                    {
+                        name: '월별 확진자',
+                        data: d
+                    }
+                ],
+                title: {
+                    text: '월별 확진자',
+                },
+            })
+
+            chart.zoomX(c[0], c[c.length - 1])
+
+            break;
+
+
+        case 'acc':
+            var objArr = obj.map(covid => ({
+                infected_count: covid['infected_count'],
+                date: covid['date']
+            })) // return [일일감염자수, 날짜]
+            chart.updateOptions({
+                xaxis: {
+                    type: 'datetime',
+                    categories: objArr.map(covid => new Date(covid['date']).getTime())
+                },
+                series: [
+                    {
+                        name: '누적 확진자',
+                        data: objArr.map(covid => covid['infected_count'])
+                    }
+                ],
+                title: {
+                    text: '누적 확진자',
+                },
+            })
+
+            break;
+
+
+        default:
+            console.error('선택을 잘못하셨거나 없는 항목을 선택하셨습니다')
+    }
 }
+
+
 
 
 

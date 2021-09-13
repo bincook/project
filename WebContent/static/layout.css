@@ -484,3 +484,48 @@ h6 {
 .inline-block {
     display: inline-block;
 }
+
+select::-ms-expand {
+    display: none;
+}
+
+select {
+    font-size: 14px;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid rgba(193, 193, 193, 0.565);
+    border-radius: 30px;
+    padding: 8px 24px 8px 8px;
+    text-align: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' style='width:24px;height:24px' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .2em top 58%;
+    background-size: 1.2em auto;
+}
+
+select:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 1px 1px rgba(59, 153, 252, .7);
+    color: #5673eb;
+    background-color: #EFF2FF;
+    outline: none;
+}
+
+select::after {
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+    height: 2px;
+    content: '★';
+}
+
+option {
+    background-color: white;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 20px;
+    margin-top: 16px;
+}
