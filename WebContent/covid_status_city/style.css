@@ -1,0 +1,311 @@
+@charset "UTF-8";
+
+* {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+body {
+	margin: 0;
+	background: #ede7f6;
+}
+
+table {
+	margin: auto;
+	border-collapse: collapse;
+}
+
+a {
+	display: block;
+	width: auto;
+	color: white;
+	margin: 5px 10px;
+}
+
+a .screen {
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 56.25%;
+	height: 80px;
+}
+
+a .screen img {
+	position: relative;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%, 0);
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	visibility: hidden;
+}
+
+a .screen span {
+	display: block;
+	position: absolute;
+	background: #009688;
+	transition: all .5s;
+	z-index: 2;
+	border-radius: 15px 15px 15px 15px;
+}
+
+a .screen span:nth-child(1) {
+	width: 0;
+	top: 0;
+	height: 5px;
+}
+
+a .screen span:nth-child(2) {
+	width: 5px;
+	right: 0;
+	top: 0;
+	height: 0;
+}
+
+a .screen span:nth-child(3) {
+	width: 0;
+	right: 0;
+	bottom: 0;
+	height: 5px;
+}
+
+a .screen span:nth-child(4) {
+	width: 5px;
+	height: 0;
+	bottom: 0;
+	left: 0;
+}
+
+a:hover .screen span:nth-child(1) {
+	width: 98%;	
+	border-radius: 15px 15px 15px 15px;
+}
+
+a:hover .screen span:nth-child(2) {
+	height: 98%;	
+	border-radius: 15px 15px 15px 15px;
+}
+
+a:hover .screen span:nth-child(3) {
+	width:98%;	
+	border-radius: 15px 15px 15px 15px;
+}
+
+a:hover .screen span:nth-child(4) {
+	height: 98%;	
+	border-radius: 15px 15px 15px 15px;
+}
+
+.imglist_ul {
+	font-size: 0;
+	width: 1100px;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+.imglist_ul li {
+	display: inline-block;
+	width: 16.65%;
+	vertical-align: top;
+	font-size: 12px;
+}
+
+a .screen span:nth-child(5) {
+	position: absolute;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+	display: block;
+	font-size: 26px;
+	color: white;
+	font-weight: bold;
+}
+
+a .screen .cityName {
+	position: absolute;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+	font-size: 26px;
+	color: white;
+	font-weight: bold;
+	background: green;
+	width: 100%;
+	text-align: center;
+	border-radius: 8px;
+	font-family: Courier;
+}
+
+a:hover .screen .cityName {
+	background: #b2dfdb;
+	color: black;
+	z-index: 3;
+	transition: all 1.2s;
+	width: 40%;
+}
+
+a:hover .screen img {
+	visibility: visible;
+	transition: all 1s;
+	opacity: 0.7;
+}
+
+table select {
+	width: 120px;
+	height: 36px;
+	text-align: center;
+	line-height: 36px;
+	font-size: 18px;
+}
+
+table select:hover {
+	cursor: pointer;
+}
+
+.info {
+	font-size: 0;
+	width: 800px;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+.info > div {
+	align: center;
+	font-size: 23px;
+	font-weight: bold;
+	text-align: center;
+	padding: 20px;
+}
+
+.btnlist_ul {
+	font-size: 0;
+	width: 100%;
+}
+
+.btnlist_ul li {
+	display: inline-block;
+	width: 25%;
+	vertical-align: top;
+	font-size: 12px;
+}
+
+.btn {
+	position: relative;
+	overflow: hidden;
+	background: transparent;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	color: #26a69a;
+	font-size: 20px;
+	font-weight: 900;
+	letter-spacing: 8px;
+	transition: all 0.4s;
+	border: none;
+}
+
+.btn::before {
+	content: "";
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background: gold;
+	top: 100%;
+	left: 0;
+	transition: all 0.4s;
+	z-index: -1;
+}
+
+.btn:hover::before {
+	transform: translateY(-100%) ;
+}
+
+.btn:hover {
+	color: black;
+}
+
+
+table .data_index {
+	/* display: none; */
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	height: 29px;
+	line-height: 29px;
+}
+
+table .show_table td {
+	height: 50px;
+	line-height: 50px;
+}
+
+table #show_table {
+	font-size: 28px;
+	font-weight: bold;
+}
+
+table .data td {
+	height: 22px;
+	line-height: 22px;
+}
+
+table .data_infected_count,
+table .data_healing_count,
+table .data_deaths_count,
+table .data_infected_rate {
+	height: 22px;
+}
+
+table .data_healing_count .date_info {
+	/* display: none; */
+	background: white;
+}
+
+table .data_infected_count td[width="25%"],
+table .data_infected_count td[width="50%"],
+table .data_healing_count td[width="25%"],
+table .data_healing_count td[width="50%"],
+table .data_deaths_count td[width="25%"],
+table .data_deaths_count td[width="50%"],
+table .data_infected_rate td[width="25%"],
+table .data_infected_rate td[width="50%"] {
+	height: 32px;
+	text-align: right;
+}
+
+table .data_infected_count #date,
+table .data_healing_count #date,
+table .data_deaths_count #date,
+table .data_infected_rate #date {
+	text-align: center;
+	position: relative;
+}
+
+table .admin_command {
+	border-top: 1px solid;
+	text-align: right;
+}
+
+table .admin_command button {
+	width: 140px;
+	height: 60px;
+	border: 1px solid black;
+	border-radius: 15px;
+	background: transparent;
+	transition: all 0.3s;
+	margin: 20px 4px;
+}
+
+table .admin_command button:hover {
+	font-size: 20px;
+}
+
+.issueOn {
+	position: absolute;
+	width: 500px;
+	height: 300px;
+	background: white;
+	border-radius: 8px;
+	overflow: auto;
+	display:none;
+}
