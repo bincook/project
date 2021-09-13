@@ -4,7 +4,10 @@
 <%@page import="map.dao.ReservationDao"%>
 <%@page import="map.dto.ReservationDto"%>
 <%@page import="java.util.List"%>
-<%@page import="map.dao.TempSession"%>
+<%@page import="map.dao.TempSession"%> 
+
+
+
 
 <%
 	
@@ -20,6 +23,9 @@
 	
 	ReservationDao repository = new ReservationDao();
 	List<ReservationDto> dtos = repository.findAllReservation();
+	
+	
+	
 %>
 <html>
 <head>
@@ -35,6 +41,12 @@
 
         <jsp:include page="../header.jsp" />
 
+        <div class="card mb-4-2">
+            <div class="card-content text-center">
+            <jsp:include page="/clinic/info.jsp"/>
+            </div>
+        </div>
+        
         <div class="card mb-4-2">
             <div class="card-content text-center">
                 <h1>카드</h1>
@@ -70,6 +82,7 @@
        		}
         %>
         
+
     </main>
 </div>
 <script src="/static/index.js"></script>
