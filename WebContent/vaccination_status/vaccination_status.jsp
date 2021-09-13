@@ -16,7 +16,10 @@
 	<%
 		VaccinationStatusDao dao = new VaccinationStatusDao();
 		ArrayList<VaccinationStatusDto> list = dao.getVaccination();
-	%> 
+	%>
+
+
+
 
 	<script>
 
@@ -29,13 +32,17 @@
 			primary_count: '<%=dto.getPrimary_count()%>',
 			secondary_count: '<%=dto.getSecondary_count()%>',
 			date: '<%=dto.getDate()%>',
-			city_name: '<%=dto.getCityNameKo() %>',
+			city_name: '<%=dto.getCityNameKo()%>',
 			population_count: '<%=dto.getPopulation_count()%>'
 			
 		},
 	
 		<%}%>
 	];
+	
+	
+	
+	
 	var groupBy = function(xs, key) {
 	  return xs.reduce(function(rv, x) {
 	    (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -44,6 +51,11 @@
 	};
 	
 	var vaccination_list_groupby = groupBy(list,'city_id');
+	
+	
+	
+	
+	
 	
 	
 	function view(obj)
@@ -67,6 +79,7 @@
 		
 		title += '</tr>';
 		console.log(last);
+		console.log(collect[i]);
 		document.getElementById('last').innerHTML = title;
 		
 		
@@ -108,10 +121,8 @@
 			text += '<td>' + parseInt(collect[i]['population_count']).toLocaleString() + '</td>';
 			text += '<td>' + (parseInt(collect[i]['total_count']) / 
 					parseInt(collect[i]['population_count'])*100 ).toFixed(2) + ' % </td>';
-					
-		
-		
-
+			text += '</tr>';
+	
 		}
 
 		
@@ -133,6 +144,18 @@
 	
 
 </script>
+
+
+
+
+	<div id="details" align="center">
+		<table id="result" border="1" align="center">
+			<tr>
+				<td>시도별 백신 접종 현황</td>
+			</tr>
+		</table>
+	</div>
+	
 
 
 
@@ -169,26 +192,24 @@
 
 
 
-<div id="details" align="center">
-	<table id="result" border="1" align="center">
-		<tr>
-			<td>시도별 백신 접종 현황</td>
-		</tr>
-	</table>
-</div>
 
 	
+
+
+<!----------------- 가로 막대그래프 그리기	------------------------>
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<!-- 기존코드(수정필요없음) -->
 	
-	
-	
-	
-	<html>
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-	<title>Insert title here</title>
-	<script type="text/javascript"
-		src="https://www.gstatic.com/charts/loader.js"></script>
-	<script type="text/javascript" align="">
+<script type="text/javascript" align="">
 				google.charts.load('current', {'packages':['corechart']});
 				google.charts.setOnLoadCallback(drawVisualization);
 				
@@ -199,35 +220,56 @@
 				var last_vaccination_by_city = [['시도명', '접종률']];
 				var group_key = Object.keys(vaccination_list_groupby);
 				
-				for (var i=0; i<group_key.length; i++) {
-					var data = vaccination_list_groupby[group_key[i]][vaccination_list_groupby[group_key[i]].length - 1];
-					
-					last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100) ]);
-				}
 				
-				console.log(last_vaccination_by_city)
-			
-				function drawVisualization() { 
-					var data = google.visualization.arrayToDataTable(last_vaccination_by_city);
-					var options = {
-							title : '시도별 백신접종 현황 ',
-							vAxis: {title: '시도명'},
-							hAxis: {title: '비율'}, 
-							seriesType: 'bars',
-							series: {5: {type: 'line'}}
-						};
+					// 여기서 for문으로 지역추출?
+						
+					for (var i=0; i<group_key.length; i++) {
+						var data = vaccination_list_groupby[group_key[i]][vaccination_list_groupby[group_key[i]].length - 1];
+
+						last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100) ]);
+					}
 					
-					var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-					chart.draw(data, options);
-				}
-			</script>
-	</head>
-	<body>
-		<div id="chart_div" style="width: 800px; height: 2000px;"></div>
-	</body>
-	</html>
+					
+					
+					console.log(last_vaccination_by_city)
+				
+					function drawVisualization() { 
+						var data = google.visualization.arrayToDataTable(last_vaccination_by_city);
+						var options = {
+								title : '시도별 백신접종 현황 ',
+								vAxis: {title: '시도명'},
+								hAxis: {title: '비율'}, 
+								seriesType: 'bars',
+								series: {5: {type: 'line'}}
+
+						var text='';
+						
+						text += '<tr>';
+						text += '<td>' + "그래프내용" + '</td>';
+						text +='';
+								
+								
+								
+							};
+						
+						var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+						chart.draw(data, options);
+					}
+					
+					
+	
+				
+</script>
 
 
+
+
+
+</head>
+<body>
+	<div id="chart_div" style="width: 800px; height: 2000px;"></div>
+</body>
+</html>
 
 
 
