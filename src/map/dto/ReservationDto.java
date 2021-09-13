@@ -4,9 +4,14 @@ import static map.util.Assertions.*;
 
 import java.sql.Date;
 
+import map.util.Id;
 import map.util.Ignore;
+import map.util.Table;
 
+@Table(name = "reservation")
 public class ReservationDto {
+	
+	@Id
 	private Integer reservation_id;
 	private Integer member_id;
 	private Integer clinic_time_id;
