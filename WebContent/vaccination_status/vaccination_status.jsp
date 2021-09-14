@@ -68,6 +68,20 @@
 		cursor: pointer;
 	}
 	
+	hr.active {
+		background-color: rgba(0, 123, 255, 0.7);
+		height: 1px;
+		box-shadow: 0 1px 2px rgba(0, 123, 255, 0.7);
+    	border-radius: 5px;
+	}
+	
+	hr.animation {
+		transform: scaleX();
+		transition-duration: 1s;
+		transition-timing-function: ease;
+	}
+}
+	
 
 </style>
 </head>
@@ -103,7 +117,7 @@
 	
 	function view(obj)
 	{
-		
+		// 시도별 진행 현황을 다시 그립니다.
 		var sido = document.querySelector('select[name=sido] option:checked');
 		var collect = vaccination_list_groupby[sido.value];
 		var text = '';
@@ -148,6 +162,23 @@
 		
 		
 		table.innerHTML = text;
+		
+		// 차트를 다시 그립니다.
+		var name = cityIdToName(sido.value);
+		
+		last_vaccination_by_city_new = [['시도명', '접종률'], ...last_vaccination_by_city.filter(s => {
+			if (s[0] == name)
+				return true;
+			else
+				return false;
+		})];
+		
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawVisualization);
+		
+		
+		// 프로그래스 진행바를 다시 그립니다.
+		resetProgress();
 	}
 	
 
@@ -157,6 +188,7 @@
 	
 	
 	var last_vaccination_by_city = [['시도명', '접종률']];
+	var last_vaccination_by_city_new;
 	var group_key = Object.keys(vaccination_list_groupby);
 	
 	for (var i=0; i<group_key.length; i++) {
@@ -164,19 +196,100 @@
 		
 		last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100) ]);
 	}
+	last_vaccination_by_city_new = last_vaccination_by_city;
 
 	function drawVisualization() { 
-		var data = google.visualization.arrayToDataTable(last_vaccination_by_city);
+		var data = google.visualization.arrayToDataTable(last_vaccination_by_city_new);
 		var options = {
 				title : '시도별 백신접종 현황 ',
 				vAxis: {title: '시도명'},
 				hAxis: {title: '비율'}, 
 				seriesType: 'bars',
-				series: {5: {type: 'line'}}
+				series: {5: {type: 'line'}},
+				animation: {
+					startup: true,
+			        duration: 600,
+			        easing: 'out',
+			    },
+				height: last_vaccination_by_city_new.length * 20 + 40
 			};
 		
 		var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
+	}
+	
+	function cityIdToName(id) {
+
+		var result = '';
+		switch (id){
+	      case '2' :
+	    	  result = '제주';
+	          break;
+	      case '3':
+	          result = '경남';
+	          break;
+	      case '4' :
+	    	  result = '경북';
+	          break;
+	      case '5' :
+	    	  result = '전남';
+	          break;
+	      case '6' :
+	    	  result = '전북';
+	          break;
+	      case '7' :
+	    	  result = '충남';
+	          break;
+	      case '8' :
+	    	  result = '충북';
+	          break;
+	      case '9' :
+	    	  result = '강원';
+	          break;
+	      case '10' :
+	    	  result = '경기도';
+	          break;
+	      case '11' :
+	    	  result = '세종';
+	          break;
+	      case '12' :
+	    	  result = '울산';
+	          break;
+	      case '13' :
+	    	  result = '대전';
+	          break;
+	      case '14' :
+	    	  result = '광주';
+	          break;
+	      case '15' :
+	    	  result = '인천';
+	          break;
+	      case '16' :
+	    	  result = '대구';
+	          break;
+	      case '17' :
+	    	  result = '부산';
+	          break;
+	      case '18' :
+	    	  result = '서울';
+	          break;
+	          
+	    }
+		return result;
+
+	}
+	
+	function resetProgress() {
+		console.log('test')
+		console.log(document.getElementById('progress-bar'))
+		document.getElementById('progress-bar').classList.remove('animation')
+		document.getElementById('progress-bar').style.width = 0;
+		
+		setInterval(function() {
+			document.getElementById('progress-bar').classList.add('animation');
+			document.getElementById('progress-bar').style.width = '100%';
+		},100);
+		
 	}
 </script>
 
@@ -217,7 +330,7 @@
                	
             </div>
             
-            <hr style="margin:0"/>
+            <hr style="margin:0" class="active animation progress-0" id="progress-bar"/>
             
             
             <div class="card-content text-center mt-4" style="place-content: center;">
@@ -234,7 +347,7 @@
         
         <div class="card mb-4-2">
         	<div class="card-content text-center mt-4" style="place-content: center;">
-        		<div id="chart_div" style="width: 100%; height: 600px;"></div>
+        		<div id="chart_div" style="width: 100%; height: fit-content"></div>
         	</div>
 
         </div>
@@ -265,6 +378,10 @@
     	</div>
   	</div>
 </div>
+
+<script>
+resetProgress();
+</script>
 
 </body>
 </html>
