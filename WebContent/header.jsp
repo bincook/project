@@ -13,7 +13,7 @@
             Category.of("/index.jsp", "국내"),
             Category.of("/clinic/clinic.jsp", "진료소"),
             Category.of("/vaccination_status/vaccination_status.jsp", "백신"),
-            Category.of("/covid_status/index.jsp", "거리두기")
+            Category.of("/covid_status/status_main.jsp", "거리두기")
     );
 %>
 
@@ -74,11 +74,12 @@
   	</div>
 </div>
 
-<div class="korea_covid_container">
-	<div class="korea_covid_status" onclick="window.open('/covid_status_city/city_status.jsp', '_blank', 'width=1600, height=1000')">
-		
+<div class="korea_covid_status icon" onclick="window.open('/covid_status_city/city_status.jsp', '_blank', 'width=1600, height=1000')">
+	<div style="width: fit-content; height: fit-content; position: absolute; left: 8px; top: 7px;">
+		<%@ include file="/icon/mdi-covid.jsp" %>
 	</div>
 </div>
+
 
 <header class="card mb-4-2">
     <div class="menu-title">

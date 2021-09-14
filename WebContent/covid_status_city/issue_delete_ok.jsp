@@ -10,6 +10,7 @@
 	dao.issue_delete_ok(issue_id);
 %>
 <script>
-  opener.location.reload();
-  close();
+	alert('삭제 했습니다');
+  	opener.location.reload();
+  	close();
 </script>

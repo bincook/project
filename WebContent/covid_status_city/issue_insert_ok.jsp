@@ -18,6 +18,7 @@
 	dao.issue_insert_ok(city_id, title, date, description, link);
 %>
 <script>
-  opener.location.reload();
-  close();
+	alert('등록 했습니다');
+  	opener.location.reload();
+  	close();
 </script>

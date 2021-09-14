@@ -396,6 +396,8 @@ function submitForm() {
 	
 	if (document.replyform.evaluation.value != '') {
 		document.replyform.submit();
+	} else {
+		alert('내용을 입력해주세요.');
 	}
 }
 
