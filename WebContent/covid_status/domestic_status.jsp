@@ -49,13 +49,13 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		color: "#FF6C6C",
 		legendText: "국내 발생자",
 		dataPoints: [    
-			{ y: <%=cdto.getSeven()%>,  label: M+"."+(D-6) },
-			{ y: <%=cdto.getSix()%>, label: M+"."+(D-5) },
-			{ y: <%=cdto.getFive()%>,  label: M+"."+(D-4) },
-			{ y: <%=cdto.getFour()%>,  label: M+"."+(D-3) },
-			{ y: <%=cdto.getThree()%>,  label: M+"."+(D-2)},
-			{ y: <%=cdto.getTwo()%>,  label: M+"."+(D-1) },
-			{ y: <%=cdto.getOne()%>,label: M+"."+D}
+			{ y: <%=cdto.getSeven()%>,  label: M+"."+(D-10) },
+			{ y: <%=cdto.getSix()%>, label: M+"."+(D-9) },
+			{ y: <%=cdto.getFive()%>,  label: M+"."+(D-8) },
+			{ y: <%=cdto.getFour()%>,  label: M+"."+(D-7) },
+			{ y: <%=cdto.getThree()%>,  label: M+"."+(D-6)},
+			{ y: <%=cdto.getTwo()%>,  label: M+"."+(D-5) },
+			{ y: <%=cdto.getOne()%>,label: M+"."+(D-4)}
 			
 		]
 	}]
