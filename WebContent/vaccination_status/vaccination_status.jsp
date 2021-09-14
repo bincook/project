@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         pageEncoding="utf-8" %>
 <%@page import="vaccination_status.VaccinationStatusDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="vaccination_status.VaccinationStatusDao"%>
@@ -6,54 +8,118 @@
 
 
 
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-	pageEncoding="utf-8"%>
+
+<% request.setCharacterEncoding("UTF-8"); %>
+
 <%
-	request.setCharacterEncoding("UTF-8");
-%>
+	VaccinationStatusDao dao = new VaccinationStatusDao();
+	ArrayList<VaccinationStatusDto> list = dao.getVaccination();
+%> 
+	
+<!DOCTYPE html>
 <html>
 <head>
-<title>vaccination_status</title>
+<meta charset="EUC-KR">
+<title>Covid 19 분석 및 게시판</title>
+<style>	
+	.fixed_headers {
+		 table-layout: fixed;
+		 border-collapse: collapse;
+		 width: 100%;
+	}
+	.fixed_headers th, .fixed_headers td {
+		 padding: 8px;
+		 text-align: left;
+	}
+	
+	.fixed_headers th {
+		background-color: #333;
+		 color: #FDFDFD;
+	}
+	 .fixed_headers thead {
+		 background-color: #333;
+		 color: #FDFDFD;
+	}
+	 .fixed_headers thead tr {
+		 display: block;
+		 position: relative;
+	}
+	 .fixed_headers tbody {
+		 display: block;
+		 overflow: auto;
+		 width: 100%;
+	}
+	.fixed_headers tbody tr {
+		width: 100%;	
+	}
+	 .fixed_headers tbody tr:nth-child(even) {
+		 background-color: #DDD;
+	}
+	 .old_ie_wrapper {
+		 width: 100%;
+		 overflow-x: hidden;
+		 overflow-y: auto;
+	}
+	 .old_ie_wrapper tbody {
+		 height: auto;
+	}
+	
+	button {
+		color: rgb(20, 186, 20);
+		background-color: inherit;
+		border: 1px solid rgba(20, 186, 20, 0.314);
+		border-radius: 20px;
+		padding: 8px;
+		cursor: pointer;
+	}
+	
+	hr.active {
+		background-color: rgba(0, 123, 255, 0.7);
+		height: 1px;
+		box-shadow: 0 1px 2px rgba(0, 123, 255, 0.7);
+    	border-radius: 5px;
+	}
+	
+	hr.animation {
+		transform: scaleX();
+		transition-duration: 1s;
+		transition-timing-function: ease;
+	}
+}
+	
+</style>
 </head>
 <body>
-
-	<%
-		VaccinationStatusDao dao = new VaccinationStatusDao();
-		ArrayList<VaccinationStatusDto> list = dao.getVaccination();
-	%>
-
-	<script>
-
-	var list = [
-		<%for (VaccinationStatusDto dto : list) {%>
-		{
-			vaccination_id: '<%=dto.getVaccination_status_id()%>',
-			city_id: '<%=dto.getCity_id()%>',
-			total_count: '<%=dto.getTotal_count()%>',
-			primary_count: '<%=dto.getPrimary_count()%>',
-			secondary_count: '<%=dto.getSecondary_count()%>',
-			date: '<%=dto.getDate()%>',
-			city_name: '<%=dto.getCityNameKo()%>',
-			population_count: '<%=dto.getPopulation_count()%>'
-			
-		},
-		<%}%>
-	];
-	
-
+<!-- 차트 -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
 	var groupBy = function(xs, key) {
 	  return xs.reduce(function(rv, x) {
 	    (rv[x[key]] = rv[x[key]] || []).push(x);
 	    return rv;
 	  }, {});
 	};
-	
+	var list = [
+		<%for (VaccinationStatusDto dto : list) {%>
+			{
+				vaccination_id: '<%=dto.getVaccination_status_id()%>',
+				city_id: '<%=dto.getCity_id()%>',
+				total_count: '<%=dto.getTotal_count()%>',
+				primary_count: '<%=dto.getPrimary_count()%>',
+				secondary_count: '<%=dto.getSecondary_count()%>',
+				date: '<%=dto.getDate()%>',
+				city_name: '<%=dto.getCityNameKo() %>',
+				population_count: '<%=dto.getPopulation_count()%>'
+				
+			},
+		<%}%>
+	];
 	var vaccination_list_groupby = groupBy(list,'city_id');
 	
-
+	
 	function view(obj)
 	{
-		
+		// 시도별 진행 현황을 다시 그립니다.
 		var sido = document.querySelector('select[name=sido] option:checked');
 		var collect = vaccination_list_groupby[sido.value];
 		var text = '';
@@ -61,107 +127,85 @@
 		
 		var last = collect[collect.length - 1];
 		var title = '';
+		title += last['date'] + "까지 " + last['city_name'] + "의 접종률 : ";
+		title += (parseInt(last['total_count']) / parseInt(last['population_count'])*100 ).toFixed(2) + ' %';
+		document.getElementById('title').innerHTML = title;
+		document.getElementById('modal_title').innerHTML = '<h2>' + sido.innerText + '</h2>';
 		
-		// <수집한 날의 마지막 날짜> 까지의 <(최종)접종률>
-		title += '<tr>';
-		title += '		<th>' + last['date'] + "까지 " + last['city_name'] + "의 접종률 : " + '</td>';		
-		title += '		<th>' + (parseInt(last['total_count']) / 
-				parseInt(last['population_count'])*100 ).toFixed(2) + ' % </td>';	
-		title += '		<hr>' 
-
+		//text += '<thead>'
+		text += '	<tr>'
+		text += '		<th>' + "날짜" + '</td>';
+		text += '		<th>' + "1차 접종수" + '</td>';
+		text += '		<th>' + "2차 접종수" + '</td>';
+		text += '		<th>' + "전체 접종수" + '</td>';
+		text += '		<th>' + "지역인구수" + '</td>';
+		text += '		<th>' + "접종률" + '</td>';
+		text += '	</tr>'
+		//text += '</thead>'
+		//text += '<tbody>'
 		
-		title += '</tr>';
-		console.log(last);
-		console.log(collect[i]);
-		document.getElementById('last').innerHTML = title;
-		
-
-		text += '<caption id="title" width="100%" align="center"><h3>' 
-				+ sido.innerText + '</h3></caption>';
-		
-		text += '<tr>'
-		//text += '	<th>' + "지역명" + '</td>';
-		text += '	<th>' + "날짜" + '</td>';
-		text += '	<th>' + "1차 접종수" + '</td>';
-		text += '	<th>' + "2차 접종수" + '</td>';
-		text += '	<th>' + "전체 접종수" + '</td>';
-		text += '	<th>' + "지역인구수" + '</td>';
-		text += '	<th>' + "접종률" + '</td>';
-		text += '</tr>'
-
-		
-		// 반복문
 		for (var i=0; i<collect.length; i++) {
+			var vaccination_rate = 
+				(parseInt(collect[i]['total_count']) / parseInt(collect[i]['population_count'])*100 ).toFixed(2)
 			
+			var weekend = new Date(collect[i]['date']);
+				
+			var style = "";
+			if (weekend.getDay() == 6 ) {
+				style="primary--text"
+				
+			}
+			else if(weekend.getDay() == 0 ) {
+				style="error--text"
+			}
+				
+			text += '<tr>'
+			text += '<td class="' + style + ' ">' + collect[i]['date']  + '</td>';
+			
+			
+			
+			
+			<%         
+            
+// 		         int yoil = xday.getDayOfWweek().getValue();
+		         
+// 		         if(yoil==7)
+// 		             yoil=0;
+		         
+// 		         int chong = xday.lengthOfMonth();
+// 		         int ju=(int)Math.ceil((chong+yoil)/7.0);
+		         
+		         
+		         
+// 		         if {}
 
-			text += '<tr>';
-			//text += '<td>' + collect[i]['city_name'] + '</td>';
-			text += '<td>' + collect[i]['date'] + '</td>';
-			
-			
-			
-<%-- 			<% --%>
-			
-// 				int yoil = xday.getDayOfWweek().getValue();
-				
-// 				if(yoil==7)
-// 					yoil=0;
-				
-// 				int chong = xday.lengthOfMonth();
-// 				int ju=(int)Math.ceil((chong+yoil)/7.0);
-				
-				
-				
-// 				if {}
 
-
-				
-				
-				
-				
-<%-- 			%> --%>
-				
-				
-				
-				
-				
-				
-				
-				
-				
+         
+         
+         
+         
+           %> 
+			
+			
+			
+			
 			
 			text += '<td>' + parseInt(collect[i]['primary_count']).toLocaleString() + '</td>';
 			text += '<td>' + parseInt(collect[i]['secondary_count']).toLocaleString() + '</td>';
 			text += '<td>' + parseInt(collect[i]['total_count']).toLocaleString() + '</td>';
 			text += '<td>' + parseInt(collect[i]['population_count']).toLocaleString() + '</td>';
-			text += '<td>' + (parseInt(collect[i]['total_count']) / 
-					parseInt(collect[i]['population_count'])*100 ).toFixed(2) + ' % </td>';
-			text += '</tr>';
-	
+			text += '<td>' + vaccination_rate + ' % </td>';
 		}
-
-		
-		// 테이블 접었다 펼치기 (innerHTML, details, outerHTML 사용)
+		//text += '</tbody>'
 		var table = document.getElementById('result');
+		document.getElementById('details_btn').style.display = 'block';
+		
 		
 		table.innerHTML = text;
 		
-		var detailsDiv = document.getElementById('details')
-		var summary = document.createElement('summary')
-		summary.innerText = "더보기"
-		
-		var details = document.createElement('details')
-		
-		details.appendChild(summary)
-		details.appendChild(table)
-		
-		detailsDiv.innerHTML = details.outerHTML
-
+		// 차트를 다시 그립니다.
 		var name = cityIdToName(sido.value);
-		console.log(cityIdToName(sido.value));
 		
-		
-		// 선택하는 지역의 접종률 그래프만 가져오는  생성
 		last_vaccination_by_city_new = [['시도명', '접종률'], ...last_vaccination_by_city.filter(s => {
 			if (s[0] == name)
 				return true;
@@ -171,13 +215,48 @@
 		
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(drawVisualization);
-
+		
+		
+		// 프로그래스 진행바를 다시 그립니다.
+		resetProgress();
 	}
 	
+	// 구글 차트 시작	
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawVisualization);
+	
+	
+	var last_vaccination_by_city = [['시도명', '접종률']];
+	var last_vaccination_by_city_new;
+	var group_key = Object.keys(vaccination_list_groupby);
+	
+	for (var i=0; i<group_key.length; i++) {
+		var data = vaccination_list_groupby[group_key[i]][vaccination_list_groupby[group_key[i]].length - 1];
+		
+		last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100) ]);
+	}
+	last_vaccination_by_city_new = last_vaccination_by_city;
+	function drawVisualization() { 
+		var data = google.visualization.arrayToDataTable(last_vaccination_by_city_new);
+		var options = {
+				title : '시도별 백신접종 현황 ',
+				vAxis: {title: '시도명'},
+				hAxis: {title: '비율'}, 
+				seriesType: 'bars',
+				series: {5: {type: 'line'}},
+				animation: {
+					startup: true,
+			        duration: 600,
+			        easing: 'out',
+			    },
+				height: last_vaccination_by_city_new.length * 20 + 40
+			};
+		
+		var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
 	
 	function cityIdToName(id) {
-		console.log(id);
-
 		var result = '';
 		switch (id){
 	      case '2' :
@@ -233,194 +312,112 @@
 	          break;
 	          
 	    }
-		console.log(result)
 		return result;
-
 	}
 	
+	function resetProgress() {
+		console.log('test')
+		console.log(document.getElementById('progress-bar'))
+		document.getElementById('progress-bar').classList.remove('animation')
+		document.getElementById('progress-bar').style.width = 0;
+		
+		setInterval(function() {
+			document.getElementById('progress-bar').classList.add('animation');
+			document.getElementById('progress-bar').style.width = '100%';
+		},100);
+		
+	}
 </script>
 
+<div id="modal-section"></div>
+<div id="root">
+    <main class="covid-main pt-5">
 
-	<div id="details" align="center">
-		<table id="result" border="1" align="center">
-			<tr>
-				<td>시도별 백신 접종 현황</td>
-			</tr>
-		</table>
-	</div>
+        <jsp:include page="../header.jsp" />
 
-
-	<!-- 	새로고침하면 나타나는 메인페에지 -->
-	<div align="center">
-
-		시도별 백신현황 <select name="sido" onchange="view(this)" id="sidoid"
-			style="font-size: 19px;">
-			<option value="2">제주특별자치도</option>
-			<option value="3">경상남도</option>
-			<option value="4">경상북도</option>
-			<option value="5">전라남도</option>
-			<option value="6">전라북도</option>
-			<option value="7">충청남도</option>
-			<option value="8">충청북도</option>
-			<option value="9">강원도</option>
-			<option value="10">경기도</option>
-			<option value="11">세종특별자치시</option>
-			<option value="12">울산광역시</option>
-			<option value="13">대전광역시</option>
-			<option value="14">광주광역시</option>
-			<option value="15">인천광역시</option>
-			<option value="16">대구광역시</option>
-			<option value="17">부산광역시</option>
-			<option value="18">서울특별시</option>
-		</select>
-
-		<hr>
-	</div>
-
-
-	<table align="center" id="last">
-	</table>
-
-
-
-	<!----------------- 가로 막대그래프 그리기	------------------------>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
-<script type="text/javascript"
-	src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script type="text/javascript" align="">
-				google.charts.load('current', {'packages':['corechart']});
-				google.charts.setOnLoadCallback(drawVisualization);
-				
-				
-				
-				console.log(vaccination_list_groupby);
-				
-				var last_vaccination_by_city = [['시도명', '접종률']];
-				var last_vaccination_by_city_new;
-				var group_key = Object.keys(vaccination_list_groupby);
-				
-				
-					// 여기서 for문으로 지역추출?
-						
-					for (var i=0; i<group_key.length; i++) {
-						var data = vaccination_list_groupby[group_key[i]][vaccination_list_groupby[group_key[i]].length - 1];
-
-						last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100)]);
-					}
-					
-					
-					last_vaccination_by_city_new = last_vaccination_by_city;
-					console.log(last_vaccination_by_city)
-					
-					// 그래프 그리기
-					function drawVisualization() { 
-						var data = google.visualization.arrayToDataTable(last_vaccination_by_city_new);
-						var options = {
-								title : '시도별 백신접종 현황 ',
-								vAxis: {title: '시도명'},
-								hAxis: {title: '비율'}, 
-								seriesType: 'bars',
-								series: {5: {type: 'line'}}
-								
-							};
-					
-	
-						
-						
-						var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-						chart.draw(data, options);
-					}
-			
-</script>
-</head>
-<body>
-	<div id="chart_div" style="width: 800px; height: 2000px;"></div>
-</body>
-</html>
-
-
-
-<%-- 
-	<%
-		for(VaccinationStatusDto dto : list) {
-	%>
-
-	예방접종 아이디<%=dto.getVaccination_status_id() %><p>
-	도시 아이디<%=dto.getCity_id() %><p>
-	전체 접종수<%=dto.getTotal_count() %><p>
-	1차 접종수<%=dto.getPrimary_count() %><p>
-	2차 접종수<%=dto.getSecondary_count() %><p>
-	등록일<%=dto.getDate() %><p>
-	<hr>
-
-	<%	
-		}
- 	%> --%>
-
-
-<script>
-
-</script>
-</body>
-</html>
-
-
-
-<!--
-	원그래프 그리기 (막대그래프로 변경)
- <html>
-    <head>
-        <meta charset="utf-8">
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
-    </head>
-
-    <body>
-        <div class="chart-div">
-            <canvas id="pieChartCanvas" width="300px" height="300px"></canvas>
+        <div class="card mb-4-2">
+        
+            <div class="card-content text-center">
+               	<div class="left" style="height: fit-content; padding: 8px;">
+               		<h1 style="color: #070707;">시도별 백신현황</h1>
+               	</div>
+               	
+               	<div class="right">
+               		<select name="sido" onchange="view(this)" id="sidoid" style="font-size: 19px;">
+						<option value="2">제주특별자치도</option>
+						<option value="3">경상남도</option>
+						<option value="4">경상북도</option>
+						<option value="5">전라남도</option>
+						<option value="6">전라북도</option>
+						<option value="7">충청남도</option>
+						<option value="8">충청북도</option>
+						<option value="9">강원도</option>
+						<option value="10">경기도</option>
+						<option value="11">세종특별자치시</option>
+						<option value="12">울산광역시</option>
+						<option value="13">대전광역시</option>
+						<option value="14">광주광역시</option>
+						<option value="15">인천광역시</option>	
+						<option value="16">대구광역시</option>
+						<option value="17">부산광역시</option>
+						<option value="18">서울특별시</option>
+					</select>
+               	</div>
+               	
+            </div>
+            
+            <hr style="margin:0" class="active animation progress-0" id="progress-bar"/>
+            
+            
+            <div class="card-content text-center mt-4" style="place-content: center;">
+               	<table id="title" ></table>
+            </div>
+            
+                    	
+        	<div class="card-content text-center mt-4" style="place-content: center;">
+        		<button id="details_btn" style="display: none;" onclick="document.getElementById('modal').style.display='block'">상세정보</button>
+        	</div>
         </div>
+        
+        
+        
+        <div class="card mb-4-2">
+        	<div class="card-content text-center mt-4" style="place-content: center;">
+        		<div id="chart_div" style="width: 100%; height: fit-content"></div>
+        	</div>
 
-        <script src="script.js"></script>
-    </body>
-</html>	
+        </div>
+        
 
+    </main>
+</div>
+<script src="/static/index.js"></script>
+
+
+<!-- 결과 모달 -->
+<div class="w3-container">
+
+	<div id="modal" class="w3-modal">
+		<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+			<div class="w3-center"><br>
+				<span onclick="document.getElementById('modal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+			</div>
+			
+			<div id="modal_title" class="card-content text-center" style="place-content: center;"></div>
+      
+			<div class="card-content text-center" style="place-content: center;">
+            	<div id="details" align="center">
+					<table id="result" border="1" class="fixed_headers" style="width: fit-content;"></table>
+				</div>
+            </div>
+    	</div>
+  	</div>
+</div>
 
 <script>
+resetProgress();
+</script>
 
-window.onload = function () {
-    pieChartDraw();
-}
-
-let pieChartData = {
-    labels: ['제주특별자치도', '경상남도', '경상북도', '전라남도', '전라북도', '충청남도'],
-    datasets: [{
-        data: [95, 12, 13, 7, 13, 10],
-        backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)']
-    }] 
-};
-
-let pieChartDraw = function () {
-    let ctx = document.getElementById('pieChartCanvas').getContext('2d');
-    
-    window.pieChart = new Chart(ctx, {
-        type: 'pie',
-        data: pieChartData,
-        options: {
-            responsive: false
-        }
-    });
-};
-
-</script> -->
-
-
-
-
-
-
-
+</body>
+</html>
