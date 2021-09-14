@@ -85,7 +85,7 @@ body {
   <tr>
     <td>
       <%=session.getAttribute("email") %>님 
-      <a href="sign-out.jsp">로그아웃</a>
+      <a href="/sign/sign-out.jsp">로그아웃</a>
     </td>
   </tr>
 </table>

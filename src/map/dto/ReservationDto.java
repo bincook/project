@@ -4,9 +4,14 @@ import static map.util.Assertions.*;
 
 import java.sql.Date;
 
+import map.util.Id;
 import map.util.Ignore;
+import map.util.Table;
 
+@Table(name = "reservation")
 public class ReservationDto {
+	
+	@Id
 	private Integer reservation_id;
 	private Integer member_id;
 	private Integer clinic_time_id;
@@ -15,6 +20,8 @@ public class ReservationDto {
 	private String phone_number;
 	private String phone_dialing_code;
 	
+	@Ignore
+	private String member_email;
 	@Ignore
 	private String clinic_name;
 	@Ignore
@@ -111,6 +118,14 @@ public class ReservationDto {
 	}
 	public String getFullnumber() {
 		return phone_area_code + "-" + phone_number + "-" + phone_dialing_code;
+	}
+	
+	public String getMember_email() {
+		return member_email;
+	}
+
+	public void setMember_email(String member_email) {
+		this.member_email = member_email;
 	}
 
 	@Override

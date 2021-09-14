@@ -128,7 +128,7 @@ public class ReservationDao {
 	}
 	
 	public List<ReservationDto> findAllReservation() throws Exception {
-		String sql = "select r.reservation_id as reservation_id, " +
+		String sql = "select r.reservation_id as reservation_id, m.email, " +
 				"ci.name as clinic_name, c.start_date as start_date, c.end_date as end_date, " +
 				"r.phone_area_code as phone_area_code, " + 
 				"r.phone_number as phone_number,"+
@@ -148,6 +148,7 @@ public class ReservationDao {
 			dto.setPhone_area_code(rs.getString("phone_area_code"));
 			dto.setPhone_number(rs.getString("phone_number"));
 			dto.setPhone_dialing_code(rs.getString("phone_dialing_code"));
+			dto.setMember_email(rs.getString("email"));
 			dtos.add(dto);
 		}
 		
@@ -157,7 +158,7 @@ public class ReservationDao {
 	}
 	
 	public List<ReservationDto> findAllReservationByMemberId(int member_id) throws Exception {
-		String sql = "select r.reservation_id as reservation_id, " +
+		String sql = "select r.reservation_id as reservation_id, m.email, " +
 				"ci.name as clinic_name, c.start_date as start_date, c.end_date as end_date, " +
 				"r.phone_area_code as phone_area_code, " + 
 				"r.phone_number as phone_number,"+
@@ -177,6 +178,7 @@ public class ReservationDao {
 			dto.setPhone_area_code(rs.getString("phone_area_code"));
 			dto.setPhone_number(rs.getString("phone_number"));
 			dto.setPhone_dialing_code(rs.getString("phone_dialing_code"));
+			dto.setMember_email(rs.getString("email"));
 			dtos.add(dto);
 		}
 		
@@ -198,14 +200,16 @@ public class ReservationDao {
 	public void save(ClinicTimeDto clinicTimeDto) throws SQLException {
 		clinicTimeDto.validateForSave();
 		
-		String sql = QueryUtil.getInsertQuery("Clinic Time", clinicTimeDto);
+		// "Clinic Time"
+		String sql = QueryUtil.getInsertQuery(clinicTimeDto);
+		System.out.println(sql);
 		
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
 	}
 	
 	public void delete(ClinicTimeDto clinicTimeDto) throws SQLException {
-		String sql = QueryUtil.getDeleteQuery("Clinic Time", clinicTimeDto.getClinic_id());
+		String sql = QueryUtil.getDeleteQuery(clinicTimeDto);
 		
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
@@ -214,7 +218,7 @@ public class ReservationDao {
 	public void update(ClinicTimeDto clinicTimeDto) throws SQLException {
 		clinicTimeDto.validateForUpdate();
 		
-		String sql = QueryUtil.getUpdateQuery("Clinic Time", "clinic_time_id", clinicTimeDto.getClinic_id(), clinicTimeDto);
+		String sql = QueryUtil.getUpdateQuery(clinicTimeDto);
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
 	}
@@ -222,14 +226,14 @@ public class ReservationDao {
 	public void save(ReservationDto reservationDto) throws SQLException {
 		reservationDto.validateForSave();
 		
-		String sql = QueryUtil.getInsertQuery("Reservation", reservationDto);
+		String sql = QueryUtil.getInsertQuery(reservationDto);
 		
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
 	}
 	
 	public void delete(ReservationDto reservationDto) throws SQLException {
-		String sql = QueryUtil.getDeleteQuery("Reservation", reservationDto.getReservation_id());
+		String sql = QueryUtil.getDeleteQuery(reservationDto);
 		
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
@@ -238,7 +242,7 @@ public class ReservationDao {
 	public void update(ReservationDto reservationDto) throws SQLException {
 		reservationDto.validateForUpdate();
 		
-		String sql = QueryUtil.getUpdateQuery("Reservation", "reservation_id", reservationDto.getReservation_id(), reservationDto);
+		String sql = QueryUtil.getUpdateQuery(reservationDto);
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(sql);
 	}

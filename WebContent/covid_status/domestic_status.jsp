@@ -1,6 +1,6 @@
 <%@page import="java.time.LocalDate"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         pageEncoding="utf-8" %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css"/>
 <!-- javascript -->
 
@@ -37,25 +37,25 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	theme: "light", // "light1", "light2", "dark1", "dark2"
 	title:{
-		text: ""
+		text: "국내 코로나 현황"
 	},
 	axisY: {
-		title: "국내 코로나 발생"
+		title: ""
 	},
 	data: [{        
 		type: "column",  
 		showInLegend: true, 
-		legendMarkerColor: "red",
-		color: "red",
-		legendText: "국내 코로나",
+		legendMarkerColor: "#FF6C6C",
+		color: "#FF6C6C",
+		legendText: "국내 발생자",
 		dataPoints: [    
-			{ y: <%=cdto.getSeven()%>,  label: M+"."+(D-6) },
-			{ y: <%=cdto.getSix()%>, label: M+"."+(D-5) },
-			{ y: <%=cdto.getFive()%>,  label: M+"."+(D-4) },
-			{ y: <%=cdto.getFour()%>,  label: M+"."+(D-3) },
-			{ y: <%=cdto.getThree()%>,  label: M+"."+(D-2)},
-			{ y: <%=cdto.getTwo()%>,  label: M+"."+(D-1) },
-			{ y: <%=cdto.getOne()%>,label: M+"."+D}
+			{ y: <%=cdto.getSeven()%>,  label: M+"."+(D-10) },
+			{ y: <%=cdto.getSix()%>, label: M+"."+(D-9) },
+			{ y: <%=cdto.getFive()%>,  label: M+"."+(D-8) },
+			{ y: <%=cdto.getFour()%>,  label: M+"."+(D-7) },
+			{ y: <%=cdto.getThree()%>,  label: M+"."+(D-6)},
+			{ y: <%=cdto.getTwo()%>,  label: M+"."+(D-5) },
+			{ y: <%=cdto.getOne()%>,label: M+"."+(D-4)}
 			
 		]
 	}]
