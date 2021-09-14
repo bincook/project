@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class CoronaDao {
 	
 	Connection conn;
@@ -17,10 +19,10 @@ public class CoronaDao {
 	public CoronaDto top() throws Exception {
 		
 		String sql ="SELECT *\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-09-01')-(select infected_count from `covid status` WHERE DATE='2021-08-31') AS infected_count_cha\r\n" + 
-				",(select release_from_quarantine_count from `covid status` WHERE DATE='2021-09-01')-(select release_from_quarantine_count from `covid status` WHERE DATE='2021-08-31') AS release_from_quarantine_count_cha\r\n" + 
-				",(select deaths_count from `covid status` WHERE DATE='2021-09-01')-(select deaths_count from `covid status` WHERE DATE='2021-08-31') AS deaths_count_cha\r\n" + 
-				",(select examine_count from `covid status` WHERE DATE='2021-09-01')-(select examine_count from `covid status` WHERE DATE='2021-08-31') AS examine_count_cha\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -4 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day)) AS infected_count_cha\r\n" + 
+				",(select release_from_quarantine_count from `covid status` WHERE DATE=date_add(curdate(), interval -4 day))-(select release_from_quarantine_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day)) AS release_from_quarantine_count_cha\r\n" + 
+				",(select deaths_count from `covid status` WHERE DATE=date_add(curdate(), interval -4 day))-(select deaths_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day)) AS deaths_count_cha\r\n" + 
+				",(select examine_count from `covid status` WHERE DATE=date_add(curdate(), interval -4 day))-(select examine_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day)) AS examine_count_cha\r\n" + 
 				"FROM `covid status` ORDER BY DATE desc LIMIT 1";
 		
 		Statement stmt = conn.createStatement();
@@ -85,13 +87,13 @@ public class CoronaDao {
 	public CoronaDto dstatus() throws Exception {
 		
 		String sql="SELECT \r\n" + 
-				"(select infected_count from `covid status` WHERE DATE='2021-09-01')-(select infected_count from `covid status` WHERE DATE='2021-08-31') AS one\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-31')-(select infected_count from `covid status` WHERE DATE='2021-08-30') AS two\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-30')-(select infected_count from `covid status` WHERE DATE='2021-08-29') AS three\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-29')-(select infected_count from `covid status` WHERE DATE='2021-08-28') AS four\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-28')-(select infected_count from `covid status` WHERE DATE='2021-08-27') AS five\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-27')-(select infected_count from `covid status` WHERE DATE='2021-08-26') AS six\r\n" + 
-				",(select infected_count from `covid status` WHERE DATE='2021-08-26')-(select infected_count from `covid status` WHERE DATE='2021-08-25') AS seven\r\n" + 
+				"(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -4 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day)) AS one\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -5 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -6 day)) AS two\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -6 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -7 day)) AS three\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -7 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -8 day)) AS four\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -8 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -9 day)) AS five\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -9 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -10 day)) AS six\r\n" + 
+				",(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -10 day))-(select infected_count from `covid status` WHERE DATE=date_add(curdate(), interval -11 day)) AS seven\r\n" + 
 				"FROM `covid status` ORDER BY DATE desc LIMIT 1";
 		
 		Statement stmt = conn.createStatement();
@@ -115,7 +117,7 @@ public class CoronaDao {
 	
 	
 	public ArrayList<CityDto> city_status() throws Exception {
-		String sql="SELECT city_id,infected_count FROM `covid status by city` WHERE DATE='2021-08-10'";
+		String sql="SELECT city_id,infected_count FROM `covid status by city` WHERE DATE=date_add(curdate(), interval -5 day)";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -135,24 +137,26 @@ public class CoronaDao {
 	}
 	
 	public ArrayList<CityDto> city_status_new() throws Exception {
+		
+		
 		String sql ="SELECT \r\n" + 
-				" (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=2) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=2) AS a2\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=3) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=3) AS a3\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=4) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=4) AS a4\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=5) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=5) AS a5\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=6) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=6) AS a6\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=7) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=7) AS a7\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=8) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=8) AS a8\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=9) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=9) AS a9\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=10) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=10) AS a10\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=11) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=11) AS a11\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=12) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=12) AS a12\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=13) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=13) AS a13\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=14) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=14) AS a14\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=15) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=15) AS a15\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=16) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=16) AS a16\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=17) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=17) AS a17\r\n" + 
-				",(SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-10' AND city_id=18) - (SELECT infected_count FROM `covid status by city` WHERE DATE = '2021-08-09' AND city_id=18) AS a18\r\n" + 
+				" (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=2) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=2) AS a2\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=3) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=3) AS a3\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=4) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=4) AS a4\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=5) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=5) AS a5\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=6) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=6) AS a6\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=7) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=7) AS a7\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=8) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=8) AS a8\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=9) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=9) AS a9\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=10) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=10) AS a10\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=11) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=11) AS a11\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=12) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=12) AS a12\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=13) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=13) AS a13\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=14) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=14) AS a14\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=15) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=15) AS a15\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=16) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=16) AS a16\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=17) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=17) AS a17\r\n" + 
+				",(SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -5 day) AND city_id=18) - (SELECT infected_count FROM `covid status by city` WHERE DATE = date_add(curdate(), interval -6 day) AND city_id=18) AS a18\r\n" + 
 				" FROM `covid status by city` LIMIT 1";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		
@@ -185,6 +189,80 @@ public class CoronaDao {
 		}
 		return list;
 	}
+	
+	public ArrayList<DistanceDto> distance() throws Exception {
+		
+
+	String sql= "SELECT social_distancing_id,\r\n" + 
+				"CASE WHEN city_id = 2 then '제주' \r\n" + 
+				"	  WHEN city_id = 3 then '경남' \r\n" + 
+				"	  WHEN city_id = 4 then '경북'\r\n" + 
+				"	  WHEN city_id = 5 then '전남'\r\n" + 
+				"	  WHEN city_id = 6 then '전북'\r\n" + 
+				"	  WHEN city_id = 7 then '충남'\r\n" + 
+				"	  WHEN city_id = 8 then '충북'\r\n" + 
+				"	  WHEN city_id = 9 then '강원'\r\n" + 
+				"	  WHEN city_id = 10 then '경기'\r\n" + 
+				"	  WHEN city_id = 11 then '세종'\r\n" + 
+				"	  WHEN city_id = 12 then '울산'\r\n" + 
+				"	  WHEN city_id = 13 then '대전'\r\n" + 
+				"	  WHEN city_id = 14 then '광주'\r\n" + 
+				"	  WHEN city_id = 15 then '인천'\r\n" + 
+				"	  WHEN city_id = 16 then '대구'\r\n" + 
+				"	  WHEN city_id = 17 then '부산'\r\n" + 
+				"	  WHEN city_id = 18 then '서울' \r\n" + 
+				"	  ELSE '그외' \r\n" + 
+				"	  END AS city_id\r\n" + 
+				",step,DATE,content\r\n" + 
+				"FROM `social distancing`";
+		
+	
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		ResultSet rs =  pstmt.executeQuery();
+		
+		ArrayList<DistanceDto> list = new ArrayList<DistanceDto>();
+		while(rs.next()) {
+			DistanceDto ddto = new DistanceDto();
+			
+			ddto.setSocial_distancing_id(rs.getInt("social_distancing_id"));
+			ddto.setCity_id(rs.getString("city_id"));
+			ddto.setDate(rs.getString("date"));
+			ddto.setStep(rs.getInt("step"));
+			ddto.setContent(rs.getString("content"));
+			
+			list.add(ddto);
+
+		}
+		
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
