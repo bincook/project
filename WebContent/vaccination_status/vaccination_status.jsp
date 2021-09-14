@@ -144,15 +144,27 @@
 
 		
 		for (var i=0; i<collect.length; i++) {
-			var vaccination_rate = 
-				(parseInt(collect[i]['total_count']) / parseInt(collect[i]['population_count'])*100 ).toFixed(2)
 			
-			text += '<tr>'
-			text += '<td>' + collect[i]['date'] + '</td>';
-			text += '<td>' + parseInt(collect[i]['primary_count']).toLocaleString() + '</td>';
-			text += '<td>' + parseInt(collect[i]['secondary_count']).toLocaleString() + '</td>';
-			text += '<td>' + parseInt(collect[i]['total_count']).toLocaleString() + '</td>';
-			text += '<td>' + parseInt(collect[i]['population_count']).toLocaleString() + '</td>';
+	        var vaccination_rate = 
+	            (parseInt(collect[i]['total_count']) / parseInt(collect[i]['population_count'])*100 ).toFixed(2)
+	         
+           	var weekend = new Date(collect[i]['date']);
+            
+         	var style = "";
+         	if (weekend.getDay() == 6 ) {
+            	style="primary--text"
+            
+         	}
+         	else if(weekend.getDay() == 0 ) {
+            	style="error--text"
+         	}
+            
+         	text += '<tr>'
+         	text += '	<td class="' + style + ' ">' + collect[i]['date']  + '</td>';
+			text += '	<td>' + parseInt(collect[i]['primary_count']).toLocaleString() + '</td>';
+			text += '	<td>' + parseInt(collect[i]['secondary_count']).toLocaleString() + '</td>';
+			text += '	<td>' + parseInt(collect[i]['total_count']).toLocaleString() + '</td>';
+			text += '	<td>' + parseInt(collect[i]['population_count']).toLocaleString() + '</td>';
 			text += '<td>' + vaccination_rate + ' % </td>';
 		}
 		//text += '</tbody>'
@@ -370,7 +382,7 @@
       
 			<div class="card-content text-center" style="place-content: center;">
             	<div id="details" align="center">
-					<table id="result" border="1" class="fixed_headers" style="width: fit-content;"></table>
+					<table id="result" class="fixed_headers" style="width: fit-content;"></table>
 				</div>
             </div>
     	</div>

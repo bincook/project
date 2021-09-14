@@ -125,7 +125,7 @@ body {
     color: #070707;
 }
 
-/* w3 css º¯°æ */
+/* w3 css ï¿½ï¿½ï¿½ï¿½ */
 .time {
 	padding: 8px;
  	border-top: 1px solid rgba(193, 193, 193, 0.314);
@@ -150,4 +150,34 @@ body {
 }
 .w3-input {
 	border-radius: 5px;
+}
+
+.korea_covid_status {
+	filter: opacity(.5) drop-shadow(0, 0, 0, white);
+    border-radius: 27px;
+    position: fixed;
+    z-index: 10;
+    float: right;
+    height: 54px;
+    width: 54px;
+    right: 30px;
+    bottom: 30px;
+    background-color: #000;
+    cursor: pointer;
+    color: white;
+    background-size: 54px 54px;
+}
+
+div.korea_covid_status:after {
+    
+    -webkit-background-size: 744px 617px;
+    background-size: 744px 617px;
+    background-position: -387px -357px;
+    width: 20px;
+    height: 20px;
+}
+
+
+.korea_covid_status path {
+	color:white !important;	
 }

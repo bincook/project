@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="covid_status_city.covid_status_cityDao" %>
-<%@ page import="covid_status_city.covid_status_cityDto" %>
+<%@ page import="covid_status_city.CovidStatusCityDao" %>
+<%@ page import="covid_status_city.CovidStatusCityDto" %>
 <%
 	request.setCharacterEncoding("utf-8");
 
@@ -14,10 +14,11 @@
 	String description = request.getParameter("IssueDescription");
 	String link = request.getParameter("IssueLink");
 	
-	covid_status_cityDao dao = new covid_status_cityDao();
+	CovidStatusCityDao dao = new CovidStatusCityDao();
 	dao.issue_insert_ok(city_id, title, date, description, link);
 %>
 <script>
-  opener.location.reload();
-  close();
+	alert('등록 했습니다');
+  	opener.location.reload();
+  	close();
 </script>

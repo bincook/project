@@ -396,6 +396,8 @@ function submitForm() {
 	
 	if (document.replyform.evaluation.value != '') {
 		document.replyform.submit();
+	} else {
+		alert('내용을 입력해주세요.');
 	}
 }
 
@@ -406,7 +408,7 @@ function goToLogin() {
 	var go = confirm('로그인이 필요한 서비스 입니다. 로그인 하시겠습니까?');
 	
 	if (go) {
-		location.href = '/sign/sign-in.jsp';
+		loginModal();
 	}
 }
 
