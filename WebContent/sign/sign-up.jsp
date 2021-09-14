@@ -29,25 +29,15 @@ table #guard {
 	border-bottom: 2px solid gray;
 }
 
-table button[type="submit"] {
-	width: 250px;
-	height: 50px;
-	border: 2px solid black;
-	border-radius: 4px;
-	font-size: 22px;
-	text-align: center;
-	background: #eeeeee;
-	line-height: 50px;
-}
-
 table button[type="button"] {
-	width: 100px;
-	height: 20px;
-	border: 3px solid black;
+	width: 250px;
+	height: 40px;
+	border: 2px solid black;
 	background: white;
-	border-radius: 5px;
-	font-size: 11px;
-	line-height: 20px;
+	border-radius: 4px;
+	font-size: 18px;
+	font-weight: 700;
+	cursor: pointer;
 }
 </style>
 <script>
@@ -83,13 +73,15 @@ function chkEverything() {
 	if(!pkc.member_email.value.match(aa)) {
 		alert("이메일을 정확히 입력하세요");
 		pkc.member_email.focus(); /* 걸린 위치로 포인트 옮기기 */
+		document.getElementById("check_email").innerHTML="<strong style='color:red;font-size:12px'>이메일 양식으로 작성하세요</strong>"
 		return;
 	}
 	
 	var idStr = "admin";
 	if(pkc.member_email.value.includes(idStr)) {
 		pkc.member_email.focus();
-		alert("admin이 포함된 이메일을 작성하지 마세요");
+		alert("포함이 불가능한 글자가 있습니다.");
+		document.getElementById("check_email").innerHTML="<strong style='color:red;font-size:12px'>포함이 불가능한 글자가 있습니다.</strong>"
 		return;
 	}
 		
@@ -97,6 +89,7 @@ function chkEverything() {
 	if(form.member_userpwd.value.length < 4){
 		pkc.member_userpwd.focus();
 		alert("암호는 4자리 이상으로 작성해주세요");
+		document.getElementById("pwd_check").innerHTML="<strong style='color:red;font-size:12px'>암호가 4자리 미만입니다.</strong>"
 		return;
 	}
 	
@@ -119,9 +112,9 @@ function chkEverything() {
 <table align="center" width="300">
   <caption> <h4>사용자 정보를 입력해주세요.</h4></caption>
   <tr>
-    <td> 이메일 <button type="button" onclick="email_check()">중복확인</button><br>
+    <td> 이메일<!-- 미구현 -->
       <div id="guard">
-        <input type="email" name="member_email" placeholder="이메일 입력 (example@example)">
+        <input type="email" name="member_email" placeholder="이메일 입력 (ID@email.com)">
       </div>
       <span id="check_email"></span>
     </td>

@@ -40,11 +40,12 @@
 		location.href = parsedUrl.href
 	}
 
-	function get_info(n) {
+	function get_info(n) {	
 		window.location.href + "&chk=";
 		var parsedUrl = new URL(window.location.href);
 		parsedUrl.searchParams.set('chk', n + 1);
 		location.href = parsedUrl.href;
+		
 	}
 
 	function win_open() {
@@ -291,7 +292,7 @@
 		<!-- submit 효과 부여하여 데이터 전송하기 -->
 		<ul class="btnlist_ul">
 			<li>
-				<button class="btn" type="button" onclick="get_info(0)">감염자수</button>
+				<button class="btn" type="button" href="#" onclick="get_info(0)">감염자수</button>
 			</li>
 			<li>
 				<button class="btn" type="button" onclick="get_info(1)">격리해제자</button>

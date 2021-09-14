@@ -10,8 +10,19 @@ body {
 	background: #546e7a;
 }
 
+.outline {
+	padding: 5px;
+	margin: 0 auto;
+	border: 1px solid white;
+	border-radius: 15px;
+	width: 240px;
+}
+
 #first caption {
-	size: 26px;
+	padding: 10px;
+	size: 36px;
+	color: white;
+	font-weight: 800;
 }
 
 #first input[name="member_email"],
@@ -29,13 +40,38 @@ body {
 	height: 36px;
 	background: #29434e;
 	color: white;
-	border-radius: 2px;
+	border-radius: 4px;
 	border: none;
 }
 
-#second a {
-	text-decoration: none;
+#first button[type="submit"]:hover {
+	cursor: pointer;
+	font-weight: 800;
+}
+
+#second div {
+	width: 120px;
+	height: 30px;
+	background: #819ca9;
+	border-radius: 4px;
+}
+
+#second div a {
 	color: black;
+	line-height: 30px;
+	text-decoration: none;
+}
+
+#second div:hover{
+	background: #29434e;
+}
+
+#second div:hover a {
+	color: white;
+}
+
+#second tr[height="10px"] {
+	padding: 10px;
 }
 </style>
 </head>
@@ -49,7 +85,7 @@ body {
   <tr>
     <td>
       <%=session.getAttribute("email") %>님 
-      <a href="">로그아웃</a>
+      <a href="sign-out.jsp">로그아웃</a>
     </td>
   </tr>
 </table>
@@ -57,14 +93,16 @@ body {
 	}
 	else {
 %>
+
+<div class="outline">
 <form method="post" action="sign-in_ok.jsp">
-<table id="first" width="225px" align="center">
+<table id="first" align="center">
 
   <caption> 로그인</caption>
   
   <tr height="50px">
     <td align="center">
-      <input type="text" name="member_email" placeholder="이메일 작성 (example@example)">
+      <input type="text" name="member_email" placeholder="이메일 작성 (ID@email.com)">
     </td>
   </tr>
   
@@ -83,19 +121,22 @@ body {
 </table>
 </form>
 
-<table id="second" width="320px" align="center">
+<table id="second" align="center">
 
   <tr height="30px">
     <td> &nbsp; </td>
   </tr>
   
-  <tr height="10px" style="background: #819ca9;" align="center">
+  <tr height="10px" align="center">
     <td>
-      <a href="sign-up.jsp"> 회원가입하기</a>
+      <div>
+        <a href="sign-up.jsp"> 회원가입하기</a>
+      </div>
     </td>
   </tr>
   
 </table>
+</div>
 <%
 	} 
 %>
