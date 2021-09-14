@@ -3,9 +3,14 @@ package map.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import map.util.Id;
 import map.util.Ignore;
+import map.util.Table;
 
+@Table(name = "clinic")
 public class ClinicDto {
+	
+	@Id
 	private Integer clinic_id;
 	private String name;
 	private Double longitude;

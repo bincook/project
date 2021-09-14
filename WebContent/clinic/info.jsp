@@ -8,6 +8,8 @@
 <%
 ClinicReplyDao clinicReplyDao = new ClinicReplyDao();
 List<ClinicReplyDto> replies = clinicReplyDao.findall();
+
+boolean isLogin = (session != null && session.getAttribute("email") != null);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -44,25 +46,10 @@ color:#3F0099;
     border-radius: 20px;
 }
 .end{
- padding-top:50px;
- padding-bottom:100px;
+ padding-top:30px;
+ padding-bottom:40px;
  font-size:18px;
  margin:auto;
-}
-.btn-like {
-  color: transparent;
-  text-shadow: 0 0 2px rgba(255,255,255,.7), 0 0 0 #000;
-}
-.btn-like:hover {
-  text-shadow: 0 0 0 #ea0;
-}
-.btn-like.done {
-  color: inherit;
-  text-shadow: 0;
-}
-.btn-like.done:hover {
-  color: transparent;
-  text-shadow: 0 0 0 #777;
 }
 .evaluation {
 	margin: 0px -0.46875px 0px 0px;
@@ -78,16 +65,76 @@ color:#3F0099;
     border: 1px solid #868686;
     padding: 8px;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+textarea {
+    padding: 10px;
+    max-width: 100%;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
 }
 
 .p-2 {
-	padding: 10px;
-	
-	
+	padding: 10px;	
 }
 
 li:not(.sub_title) {
 	text-align: justify;
+}
+
+
+.btn-like {
+  color: transparent;
+  text-shadow: 0 0 2px rgba(255,255,255,.7), 0 0 0 #000;
+}
+.btn-like:hover {
+  text-shadow: 0 0 0 #ea0;
+}
+.btn-like.done {
+  color: inherit;
+  text-shadow: 0;
+}
+.btn-like.done:hover {
+  color: transparent;
+  text-shadow: 0 0 0 #777;
+}
+
+.icon_wrapper {
+	position: relative;
+	width: fit-content;
+  	display: inline-block;
+}
+
+.effect_section {
+	position: absolute;
+    width: 50px;
+    height: 300px;
+    display: block;
+    right: 16px;
+    bottom: 36px;
+}
+
+.effect_section svg {
+	position:absolute;
+}
+
+
+.reply {
+    border-bottom: 1px solid rgba(134, 134, 134, 0.5);
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.reply-email {
+	margin-top: 8px;
+}
+
+.reply-date {
+	font-size: 8px;
+    margin-top: 4px;
 }
 </style>
 <script src="//code.jquery.com/jquery.min.js"></script>
@@ -147,14 +194,34 @@ $(".btn-like").click(function() {
 	
 	<div class="end">
 	 	<div class="details"> 해당 내용이 도움이 되셨나요? </div>
-	<form method="post" action="/clinic/evaluation.jsp">
+	<form name="replyform" method="post" action="/clinic/evaluation.jsp">
 		<textarea name="evaluation" placeholder="한 줄 평" class="evaluation"></textarea>
+	 	
 	 	
 	 	<p class="p-2"></p>
 	 	
-	 	<button class="btn-like btn">♥</button>
 	 	
-	 	<input class="btn" type="submit" value="저장">
+	 	
+	 	<div class="icon_wrapper">
+	 	<button type="button" class="btn-like btn" onclick="playRandom()">♥</button>
+	 	
+	 	<span class="effect_section" id="icon-container"></span>
+	 	</div>
+	 	
+	 	<%
+			if (isLogin) {
+		%>
+	 	
+	 			<button class="btn" type="button" onclick="submitForm()">저장</button>
+	 	
+	 	<%
+			} else {
+	 	%>
+	 	
+	 			<button class="btn" type="button" onclick="goToLogin()">저장</button>
+	 	<%
+			}
+	 	%>
 	</form>
 	</div>
 	
@@ -165,10 +232,10 @@ $(".btn-like").click(function() {
 		for (int i=0; i<replies.size(); i++) {
 			ClinicReplyDto dto = replies.get(i);
 		%>
-		<ul>
-		 <li><%=dto.getContent() %></li>
-		 <li><%=dto.getEmail() %></li>
-		 <li><%=dto.getWriteday() %></li>
+		<ul class="reply">
+		 <li class="reply-content"><%=dto.getContent() %></li>
+		 <li class="reply-email"><%=dto.getEmail() %></li>
+		 <li class="reply-date"><%=dto.getWriteday() %></li>
 		</ul>
 		<%
 		}
@@ -176,6 +243,173 @@ $(".btn-like").click(function() {
 	</div>
 </div>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+
+<script>
+
+
+var container = document.getElementById('icon-container');
+var animation1 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart1.json'
+});
+
+
+var animation2 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart2.json'
+});
+
+var animation3 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart3.json'
+});
+
+
+var animation4 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart4.json'
+});
+
+
+var animation5 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart5.json'
+});
+
+
+var animation6 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart6.json'
+});
+
+
+var animation7 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart7.json'
+});
+
+
+var animation8 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart8.json'
+});
+
+
+var animation9 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart9.json'
+});
+
+
+var animation10 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/heart10.json'
+});
+
+var pop_animation1 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/popEffect1.json'
+});
+
+var pop_animation2 = bodymovin.loadAnimation({
+    wrapper: container,
+    animType: 'svg',
+    loop: false,
+    prerender: true,
+    autoplay: false,
+    path: '/utils/popEffect2.json'
+});
+
+
+
+var heart_list = [animation1, animation2, animation3, animation4, animation5, animation6, animation7, animation8, animation9, animation10];
+
+var pop_list = [pop_animation1, pop_animation2];
+
+// 하트 무늬 나옴
+function playRandom() {
+	
+	var pop = (Math.floor(Math.random() * 10) == 0);
+	var random = Math.floor(Math.random() * heart_list.length);
+	
+	if (!pop) {
+		heart_list[random].playSegments([0,150], true);
+	} else {
+		heart_list[random].playSegments([0,150], true);
+		
+		pop_list[Math.floor(Math.random() * pop_list.length)].playSegments([0,150], true);
+	}
+	
+	
+}
+
+function submitForm() {
+	
+	if (document.replyform.evaluation.value != '') {
+		document.replyform.submit();
+	}
+}
+
+
+// 로그인
+function goToLogin() {
+	
+	var go = confirm('로그인이 필요한 서비스 입니다. 로그인 하시겠습니까?');
+	
+	if (go) {
+		location.href = '/sign/sign-in.jsp';
+	}
+}
+
+
+</script>
 
 
 
