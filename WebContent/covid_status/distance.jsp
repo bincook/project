@@ -95,8 +95,13 @@
 	function openModal(city, stair, content){
 		document.getElementById('modal_city').innerText = city;
 		document.getElementById('modal_content').innerText = content;
-		if (stair == 4 || stair == 3) {
+		
+		
+		
+		if (stair == 4) {
 			document.getElementById('modal_stair').innerHTML = '<b style="color:red">' + stair + '단계' + '</b>';
+		} else if (stair == 3) {
+			document.getElementById('modal_stair').innerHTML = '<b style="color:#CC6600">' + stair + '단계' + '</b>';
 		} else {
 			document.getElementById('modal_stair').innerText = stair + '단계';
 		}
