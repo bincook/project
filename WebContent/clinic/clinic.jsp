@@ -4,7 +4,10 @@
 <%@page import="map.dao.ReservationDao"%>
 <%@page import="map.dto.ReservationDto"%>
 <%@page import="java.util.List"%>
-<%@page import="map.dao.TempSession"%>
+<%@page import="map.dao.TempSession"%> 
+
+
+
 
 <%
 	
@@ -20,11 +23,15 @@
 	
 	ReservationDao repository = new ReservationDao();
 	List<ReservationDto> dtos = repository.findAllReservation();
+	
+	
+	
 %>
 <html>
 <head>
     <title>Covid 19 분석 및 게시판</title>
     <link rel="stylesheet" href="/static/index.css">
+    <script src="/static/index.js"></script>
 
 </head>
 <body>
@@ -37,7 +44,13 @@
 
         <div class="card mb-4-2">
             <div class="card-content text-center">
-                <h1>카드</h1>
+            <jsp:include page="/clinic/info.jsp"/>
+            </div>
+        </div>
+        
+        <div class="card mb-4-2">
+            <div class="card-content text-center">
+                <h1 style="color: #070707;">진료소</h1>
             </div>
         </div>
 
@@ -49,17 +62,25 @@
         <% 
         	if (isLogin && isAdmin) {
      	%>
+  			    <div class="card mb-4-2">
+		            <div class="card-content text-center">
+		                <h1 style="color: #070707;">예약자 명단</h1>
+		            </div>
+		        </div>
+     			
+     	
+     	
      			<div class="card mb-4-2">
      	<%
         		for (ReservationDto dto : dtos) {
         %>
         
 	        <!-- 관리자 예약 현황 확인 -->
-            <div class="card-content text-center" style="border-bottom: 1px solid rgba(193, 193, 193, 0.314);">
-            	<span class="clinic_name" style="color: #070707;"><%=dto.getClinic_name() %></span> : 
-            	<span class="clinic_date" style="color: #178a17;"><%=dto.getStart_date() %></span> ~ 
-            	<span class="clinic_date" style="color: #178a17;"><%=dto.getEnd_date() %></span>
-                <span class="clinic_name"><%=dto.getFullnumber() %></span>
+            <div class="card-content text-center" style="border-bottom: 1px solid rgba(193, 193, 193, 0.314); flex-direction: column;">
+           		<span class="clinic_name" style="color: #070707; text-align: left;"><%=dto.getClinic_name() %></span>
+           		<span class="clinic_date" style="color: #178a17; text-align: left;"><%=dto.getStart_date() %> ~ <%=dto.getEnd_date() %></span>
+               	<span class="clinic_name" style="text-align: left;"><%=dto.getMember_email() %> : <%=dto.getFullnumber() %></span>
+              	
             </div>
 	        
         <%
@@ -70,9 +91,11 @@
        		}
         %>
         
+
     </main>
 </div>
-<script src="/static/index.js"></script>
+
+
 </body>
 </html>
 

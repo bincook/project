@@ -3,9 +3,15 @@ package map.dto;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import map.util.Id;
+import map.util.Table;
+
 import static map.util.Assertions.*;
 
+@Table(name = "clinic time")
 public class ClinicTimeDto {
+	
+	@Id
 	private Integer clinic_time_id;
 	private Integer clinic_id;
 	private Timestamp start_date;

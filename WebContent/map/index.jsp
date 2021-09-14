@@ -41,6 +41,14 @@
 <%
 	if (isAdmin) {
 %>
+		<!-- 병원정보 -->
+		<div class="w3-container">
+			<div class="w3-section">
+				<h1 id="clinic_name"></h1><br />
+				<span id="clinic_address"></span>
+			</div>
+		</div>
+		
 		<!-- 시간 등록 폼 -->
       <form class="w3-container" action="/map/register_clinic_time.jsp">
         <div class="w3-section">
@@ -48,16 +56,16 @@
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="clinic_id" id="clinic_id">
         
         
-          <label><b>start date</b></label>
+          <label><b>시작일시</b></label>
           <input style="margin-top: 4px;" class="w3-input w3-border w3-margin-bottom" type="date" name="start_date" required>
           <input class="w3-input w3-border w3-margin-bottom" type="time" name="start_time" required>
           
-          <label><b>end date</b></label>
+          <label><b>종료일시</b></label>
           <input style="margin-top: 4px;" class="w3-input w3-border w3-margin-bottom" type="date" name="end_date" required>
           <input class="w3-input w3-border w3-margin-bottom" type="time" name="end_time" required>
           
-          <label><b>capacity</b></label>
-          <input style="margin-top: 4px;" class="w3-input w3-border" name="capacity" type="number" placeholder="Enter capacity" required>
+          <label><b>수용인원</b></label>
+          <input style="margin-top: 4px;" class="w3-input w3-border" name="capacity" type="number" placeholder="수용인원을 입력하세요" required>
           
           <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">등록</button>
 
@@ -65,12 +73,14 @@
       </form>
 
       <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-        <button onclick="document.getElementById('modal').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+        <button onclick="document.getElementById('modal').style.display='none'" type="button" class="w3-button w3-red">취소</button>
 
       </div>
 <%
 	} else {
 %>
+
+
 		<!-- 시간 예약 폼 -->
       <form class="w3-container" action="/map/register_reservation.jsp">
         <div class="w3-section">
@@ -78,11 +88,11 @@
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="clinic_time_id" id="clinic_time_id">
       		<input class="w3-input w3-border w3-margin-bottom" type="hidden" name="member_id" id="member_id" value="<%=memberId%>">
         
-        	<label><b>area code</b></label>
+        	<label><b>지역번호</b></label>
           	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_area_code" required>
-          	<label><b>number</b></label>
+          	<label><b>중간번호</b></label>
           	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_number" required>
-          	<label><b>dialing code</b></label>
+          	<label><b>끝번호</b></label>
           	<input style="margin-top: 4px;"  class="w3-input w3-border w3-margin-bottom" type="number" name="phone_dialing_code" required>
         	<!-- 정말 이 시간으로 예약 하실래요? -->
 			
@@ -111,7 +121,19 @@
         <span onclick="document.getElementById('timeList').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
       </div>
 		
+		<!-- 병원정보 -->
+		<div class="w3-container" style="margin: 0 !important;">
+			<div class="w3-section"  style="margin: 0 !important;">
+				<h1 id="clinic_name"></h1><br />
+				<span id="clinic_address"></span>
+			</div>
+		</div>
 		
+		
+		
+		<div class="w3-section" id="clinic_description" style="padding-left: 32%; margin: 0 !important; color: #eb5374;">
+			
+		</div>
 		<div class="w3-section" id="timetable"></div>
 		
     </div>
@@ -203,7 +225,10 @@ for (var i = 0; i < positions.length; i ++) {
 	<%
 		if (isAdmin && isLogin) {
 	%>
+		// 관리자 모달
 		kakao.maps.event.addListener(marker, 'click', function() {
+			document.getElementById('clinic_name').innerText = this.info.name;
+			document.getElementById('clinic_address').innerText = this.info.address;
 			document.getElementById('modal').style.display='block';
 			document.getElementById('clinic_id').value=this.info.id;
 	  	});
@@ -219,13 +244,57 @@ for (var i = 0; i < positions.length; i ++) {
 			
 			var html = '';
 			for (i=0; i<timeList.length; i++) {
+				var start = new Date(timeList[i]['start_date']);
+				var end = new Date(timeList[i]['end_date']);
+				
 				html += '<div class="time" onclick="check_register(' + timeList[i]['clinic_time_id'] + ')">';
 				html += '<span class="order">' + (i+1) + '. </span>';
-				html += '<span class="description">' + timeList[i]['start_date'] + ' ~ ' + timeList[i]['end_date'] + '</span>';
+				html += '<span style="color:#14ba14; margin-right:16px;">' + start.getFullYear() + '년 ' + (start.getMonth() + 1) + '월 ' + start.getDate() + '일' + '</span>'
+				html += '<span class="description">' + start.getHours() + '시 ' + start.getMinutes() + '분 ~ ' + end.getHours() + '시 ' + end.getMinutes() + '분</span>';
 				html += '</div>';
 			}
 			
 			document.getElementById('timetable').innerHTML = html;
+			document.getElementById('clinic_name').innerText = this.info.name;
+			document.getElementById('clinic_address').innerText = this.info.address;
+			
+			if (timeList.length == 0) {
+				document.getElementById('clinic_description').innerText = "예약 가능한 일정이 없습니다";
+			} else {
+				document.getElementById('clinic_description').innerText = "";
+			}
+	  	});
+	<%
+		} else {
+	%>
+		kakao.maps.event.addListener(marker, 'click', function() {
+			document.getElementById('timeList').style.display='block';
+			
+			
+			// 타임 테이블 만큼 예약표 그려주기 => timetable
+			var timeList = this.info.time;
+			
+			var html = '';
+			for (i=0; i<timeList.length; i++) {
+				var start = new Date(timeList[i]['start_date']);
+				var end = new Date(timeList[i]['end_date']);
+				
+				html += '<div class="time">';
+				html += '<span class="order">' + (i+1) + '. </span>';
+				html += '<span style="color:#14ba14; margin-right:16px;">' + start.getFullYear() + '년 ' + (start.getMonth() + 1) + '월 ' + start.getDate() + '일' + '</span>'
+				html += '<span class="description">' + start.getHours() + '시 ' + start.getMinutes() + '분 ~ ' + end.getHours() + '시 ' + end.getMinutes() + '분</span>';
+				html += '</div>';
+			}
+			
+			document.getElementById('timetable').innerHTML = html;
+			document.getElementById('clinic_name').innerText = this.info.name;
+			document.getElementById('clinic_address').innerText = this.info.address;
+			
+			if (timeList.length == 0) {
+				document.getElementById('clinic_description').innerText = "예약 가능한 일정이 없습니다";
+			} else {
+				document.getElementById('clinic_description').innerText = "";
+			}
 	  	});
 	<%
 		}
