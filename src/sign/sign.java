@@ -1,5 +1,6 @@
 package sign;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -66,4 +67,10 @@ public class sign {
 			response.sendRedirect("sign-in.jsp");
 		}
 	}
+	
+	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+		session.invalidate();
+		response.sendRedirect("/");
+	}
+	
 }

@@ -247,7 +247,7 @@
 	    	  result = '강원';
 	          break;
 	      case '10' :
-	    	  result = '경기도';
+	    	  result = '경기';
 	          break;
 	      case '11' :
 	    	  result = '세종';
@@ -280,8 +280,6 @@
 	}
 	
 	function resetProgress() {
-		console.log('test')
-		console.log(document.getElementById('progress-bar'))
 		document.getElementById('progress-bar').classList.remove('animation')
 		document.getElementById('progress-bar').style.width = 0;
 		

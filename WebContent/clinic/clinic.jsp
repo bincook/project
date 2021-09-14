@@ -37,7 +37,7 @@
 <body>
 
 <div id="modal-section"></div>
-<div id="root">
+<div id="root" style="width:100%; overflow: inherit;">
     <main class="covid-main pt-5">
 
         <jsp:include page="../header.jsp" />

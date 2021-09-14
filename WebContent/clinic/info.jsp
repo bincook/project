@@ -109,6 +109,8 @@ li:not(.sub_title) {
 }
 
 .effect_section {
+
+	pointer-events: none;
 	position: absolute;
     width: 50px;
     height: 300px;
