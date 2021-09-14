@@ -5,11 +5,12 @@
 <head>
     <title>sign-in</title>
 <style>
-body {
-	margin: auto;
-	background: #546e7a;
-}
 
+.login_input {
+	border: 1px solid #868686 !important;
+    width: 100%  !important;
+    height: 36px  !important;
+}
 .outline {
 	padding: 5px;
 	margin: 0 auto;
@@ -84,8 +85,7 @@ body {
 <table>
   <tr>
     <td>
-      <%=session.getAttribute("email") %>님 
-      <a href="/sign/sign-out.jsp">로그아웃</a>
+     <a href="/sign/sign-out.jsp"><%=session.getAttribute("email") %>님 로그아웃</a>
     </td>
   </tr>
 </table>
@@ -95,20 +95,20 @@ body {
 %>
 
 <div class="outline">
-<form method="post" action="sign-in_ok.jsp">
+<form method="post" action="/sign/sign-in_ok.jsp">
 <table id="first" align="center">
 
   <caption> 로그인</caption>
   
   <tr height="50px">
     <td align="center">
-      <input type="text" name="member_email" placeholder="이메일 작성 (ID@email.com)">
+      <input class="login_input" type="text" name="member_email" placeholder="이메일 작성 (ID@email.com)">
     </td>
   </tr>
   
   <tr height="50px">
     <td align="center">
-      <input type="password" name="member_userpwd" placeholder="비밀번호">
+      <input  class="login_input" type="password" name="member_userpwd" placeholder="비밀번호">
     </td>
   </tr>
   
@@ -118,24 +118,15 @@ body {
     <td>
   </tr>
   
+ <tr height="50px">
+    <td align="center">
+      <a href="javascript:signModal()"> 회원가입하기</a>
+    <td>
+  </tr>
+  
 </table>
 </form>
 
-<table id="second" align="center">
-
-  <tr height="30px">
-    <td> &nbsp; </td>
-  </tr>
-  
-  <tr height="10px" align="center">
-    <td>
-      <div>
-        <a href="sign-up.jsp"> 회원가입하기</a>
-      </div>
-    </td>
-  </tr>
-  
-</table>
 </div>
 <%
 	} 

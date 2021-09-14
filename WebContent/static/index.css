@@ -125,7 +125,7 @@ body {
     color: #070707;
 }
 
-/* w3 css º¯°æ */
+/* w3 css ï¿½ï¿½ï¿½ï¿½ */
 .time {
 	padding: 8px;
  	border-top: 1px solid rgba(193, 193, 193, 0.314);
@@ -150,4 +150,26 @@ body {
 }
 .w3-input {
 	border-radius: 5px;
+}
+
+.korea_covid_container {
+	width: 80px;
+    height: 80px;
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.korea_covid_status {
+	width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    background-image: url(/korea.png);
+    color: black;
+    background-color: #c1e4ff;
+    padding: 5px;
+    background-size: 75px 75px;
+    background-repeat: no-repeat;
 }

@@ -108,7 +108,7 @@ function chkEverything() {
 </script>
 </head>
 <body>
-<form name="pkc" method="post" action="sign-up_ok.jsp">
+<form name="pkc" method="post" action="/sign/sign-up_ok.jsp">
 <table align="center" width="300">
   <caption> <h4>사용자 정보를 입력해주세요.</h4></caption>
   <tr>
