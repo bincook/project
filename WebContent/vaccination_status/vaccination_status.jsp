@@ -82,17 +82,6 @@
 		console.log(collect[i]);
 		document.getElementById('last').innerHTML = title;
 		
-		
-// 		specific += '<tr>';
-
-
-
-// 		specific += '		&nbsp;<p>&nbsp<p>&nbsp;<p>&nbsp;<p>';
-// 		specific += '</tr>';
-
-// 		colsole.log(specific);
-// 		document.getElementById('specific').innerHTML = title;
-		
 
 		text += '<caption id="title" width="100%" align="center"><h3>' 
 				+ sido.innerText + '</h3></caption>';
@@ -139,13 +128,89 @@
 		details.appendChild(table)
 		
 		detailsDiv.innerHTML = details.outerHTML
+
+		var name = cityIdToName(sido.value);
+		console.log(cityIdToName(sido.value));
+		
+		last_vaccination_by_city_new = [['시도명', '접종률'], ...last_vaccination_by_city.filter(s => {
+			if (s[0] == name)
+				return true;
+			else
+				return false;
+		})];
+		
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawVisualization);
+
+
+		
 	
 	}
 	
+	function cityIdToName(id) {
+		console.log(id);
+
+		var result = '';
+		switch (id){
+	      case '2' :
+	    	  result = '제주';
+	          break;
+	      case '3':
+	          result = '경남';
+	          break;
+	      case '4' :
+	    	  result = '경북';
+	          break;
+	      case '5' :
+	    	  result = '전남';
+	          break;
+	      case '6' :
+	    	  result = '전북';
+	          break;
+	      case '7' :
+	    	  result = '충남';
+	          break;
+	      case '8' :
+	    	  result = '충북';
+	          break;
+	      case '9' :
+	    	  result = '강원';
+	          break;
+	      case '10' :
+	    	  result = '경기도';
+	          break;
+	      case '11' :
+	    	  result = '세종';
+	          break;
+	      case '12' :
+	    	  result = '울산';
+	          break;
+	      case '13' :
+	    	  result = '대전';
+	          break;
+	      case '14' :
+	    	  result = '광주';
+	          break;
+	      case '15' :
+	    	  result = '인천';
+	          break;
+	      case '16' :
+	    	  result = '대구';
+	          break;
+	      case '17' :
+	    	  result = '부산';
+	          break;
+	      case '18' :
+	    	  result = '서울';
+	          break;
+	          
+	    }
+		console.log(result)
+		return result;
+
+	}
 
 </script>
-
-
 
 
 	<div id="details" align="center">
@@ -156,8 +221,6 @@
 		</table>
 	</div>
 	
-
-
 
 	<!-- 	새로고침하면 나타나는 메인페에지 -->
 	<div align="center">
@@ -192,12 +255,7 @@
 
 
 
-
-	
-
-
 <!----------------- 가로 막대그래프 그리기	------------------------>
-
 
 <html>
 <head>
@@ -205,9 +263,6 @@
 <title>Insert title here</title>
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
-
-
-<!-- 기존코드(수정필요없음) -->
 	
 <script type="text/javascript" align="">
 				google.charts.load('current', {'packages':['corechart']});
@@ -218,6 +273,7 @@
 				console.log(vaccination_list_groupby);
 				
 				var last_vaccination_by_city = [['시도명', '접종률']];
+				var last_vaccination_by_city_new;
 				var group_key = Object.keys(vaccination_list_groupby);
 				
 				
@@ -226,39 +282,28 @@
 					for (var i=0; i<group_key.length; i++) {
 						var data = vaccination_list_groupby[group_key[i]][vaccination_list_groupby[group_key[i]].length - 1];
 
-						last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100) ]);
+						last_vaccination_by_city.push([ data['city_name'],  Math.floor((data['total_count'] / data['population_count']) * 100)]);
 					}
 					
 					
-					
+					last_vaccination_by_city_new = last_vaccination_by_city;
 					console.log(last_vaccination_by_city)
 				
 					function drawVisualization() { 
-						var data = google.visualization.arrayToDataTable(last_vaccination_by_city);
+						var data = google.visualization.arrayToDataTable(last_vaccination_by_city_new);
 						var options = {
 								title : '시도별 백신접종 현황 ',
 								vAxis: {title: '시도명'},
 								hAxis: {title: '비율'}, 
 								seriesType: 'bars',
 								series: {5: {type: 'line'}}
-
-						var text='';
-						
-						text += '<tr>';
-						text += '<td>' + "그래프내용" + '</td>';
-						text +='';
-								
-								
 								
 							};
 						
 						var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 						chart.draw(data, options);
 					}
-					
-					
-	
-				
+			
 </script>
 
 
@@ -346,13 +391,6 @@ let pieChartDraw = function () {
 };
 
 </script> -->
-
-
-
-
-
-
-
 
 
 
