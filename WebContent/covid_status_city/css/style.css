@@ -16,6 +16,11 @@ table {
 	border-collapse: collapse;
 }
 
+.title {
+	margin: auto;
+	text-align: center;
+}
+
 a {
 	display: block;
 	width: auto;
@@ -301,16 +306,3 @@ table .admin_command button:hover {
 	font-size: 20px;
 }
 
-.issueOn {
-	position: absolute;
-	width: 500px;
-	height: 30px;
-	top: 0;
-	left: 0;
-
-	background: white;
-	border-radius: 8px;
-	overflow: auto;
-	display: none;
-	z-index: 3;
-}

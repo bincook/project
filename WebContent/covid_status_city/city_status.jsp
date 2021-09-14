@@ -10,6 +10,19 @@
 <head>
 <title>city_status.jsp</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+.issueOn {
+	position: absolute;
+	width: 500px;
+	height: 200px;
+	top: -500%;
+	left: -230%;
+	background: white;
+	border-radius: 8px;
+	display: none;
+	z-index: 3;
+}
+</style>
 <script>
 	function cityName(n) {
 		location = 'city_status.jsp?city_id=' + [ n ];
@@ -35,16 +48,21 @@
 	}
 
 	function win_open() {
-		open("issue_insert.jsp", "", "width=450,height=300");
+		open("issue_insert.jsp", "", "width=450,height=450");
 	}
 
 	function del_issue() {
 		open("issue_delete.jsp", "", "width=800,height=300");
 	}
 
+	function showSource() {
+		alert("출처 및 참고 자료 입니다.");
+		open("source.jsp", "", "width=500,height=500");
+	}
+
 	function showIssue(td) {
 		td.getElementsByClassName('IssueOn')[0].style.display = "block";
-			
+
 	}
 
 	function hiddenIssue(td) {
@@ -53,7 +71,7 @@
 </script>
 </head>
 <body>
-	<div class="title">코로나 데이터</div>
+	<div class="title"><h1>코로나 데이터 및 이슈</h1></div>
 	<ul class="imglist_ul">
 
 		<li><a href="javascript:cityName(18)">
@@ -92,7 +110,7 @@
 				<div class="screen">
 					<span></span><span></span><span></span><span></span>
 					<div class="cityName">광주</div>
-					<img src="pic/hwangju.png">
+					<img src="pic/gwangju.png">
 				</div>
 		</a></li>
 
@@ -140,7 +158,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">충북</div>
-					<img src="pic/.jpg">
+					<img src="pic/chungbuk.jpg">
 				</div>
 		</a></li>
 
@@ -148,7 +166,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">충남</div>
-					<img src="pic/">
+					<img src="pic/chungnam.png">
 				</div>
 		</a></li>
 
@@ -156,7 +174,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">전북</div>
-					<img src="pic/">
+					<img src="pic/jeonbuk.jpg">
 				</div>
 		</a></li>
 
@@ -164,7 +182,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">전남</div>
-					<img src="pic/">
+					<img src="pic/jeonnam.jpg">
 				</div>
 		</a></li>
 
@@ -172,7 +190,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">경북</div>
-					<img src="pic/">
+					<img src="pic/gyongbuk.jpg">
 				</div>
 		</a></li>
 
@@ -180,7 +198,7 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">경남</div>
-					<img src="pic/">
+					<img src="pic/gyongnam.jpg">
 				</div>
 		</a></li>
 
@@ -188,15 +206,14 @@
 				<div class="screen">
 					<span></span> <span></span> <span></span> <span></span>
 					<div class="cityName">제주</div>
-					<img src="pic/">
+					<img src="pic/jeju.jpg">
 				</div>
 		</a></li>
 
-		<li><a href="">
+		<li><a href="javascript:showSource()">
 				<div class="screen">
 					<span></span><span></span> <span></span><span></span>
 					<div class="cityName">비고</div>
-					<img src="">
 				</div>
 		</a></li>
 
@@ -205,9 +222,10 @@
 	<table width="800px" align="center">
 
 		<%
+			String city_id = request.getParameter("city_id");
 			String yearStr = request.getParameter("year");
 			String monthStr = request.getParameter("month");
-			if (yearStr == null || monthStr == null) {
+			if (city_id == null || yearStr == null || monthStr == null) {
 		%>
 
 		<tr class="table_date">
@@ -299,7 +317,6 @@
 			int chk = Integer.parseInt(chkStr);
 			if (chk == 1) {
 				CovidStatusCityDao dao = new CovidStatusCityDao();
-				String city_id = request.getParameter("city_id");
 				int year = Integer.parseInt(yearStr);
 				int month = Integer.parseInt(monthStr);
 				ArrayList<CovidStatusCityDto> list = dao.city_list(city_id, year, month);
@@ -315,35 +332,36 @@
 		</tr>
 		<!-- 정보란을 눌렀을 때 보이게 하기 -->
 		<%
-			for (CovidStatusCityDto dto: list) {
+			for (CovidStatusCityDto dto : list) {
 		%>
-		<tr class="data_infected_count">
+		<tr class="data_infected_count showData">
 			<!-- 감염자 수 눌렀을 경우 -->
 			<td width="25%">
 				<!-- 한달간 데이터 중 수치만 나오게 하기 / 할 수 있으면 그래프 그리기 --> <span><%=dto.getName_ko()%></span>
 			</td>
 			<td width="50%" colspan="2"><span><%=dto.getInfected_count()%>명</span>
 			</td>
-			
-				<% boolean existedContent = dto.getTitle() != null; %>
-			
-			<td width="25%" id="date" <%= existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'": "" %> >
-				<span> <%=dto.getDate() %></span>
-				
-				<%
-					if (existedContent) {
-				%>
+
+			<%
+				boolean existedContent = dto.getTitle() != null;
+			%>
+
+			<td width="25%" id="date"
+				<%=existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'" : ""%>>
+				<span> <%=dto.getDate()%></span> <%
+ 	if (existedContent) {
+ %>
 				<div class="issueOn">
 					<h3>
 						<%=dto.getTitle()%></h3>
 					<p>
-						<%=dto.getDescription() %>
+						<%=dto.getDescription()%>
 					</p>
-					<span> <%=dto.getDate() %> </span>
-				</div>
-				<%
-					}
-				%>
+					<span> <%=dto.getDate()%>
+					</span>
+				</div> <%
+ 	}
+ %>
 			</td>
 		</tr>
 		<%
@@ -362,40 +380,41 @@
 		</tr>
 		<%
 			CovidStatusCityDao dao = new CovidStatusCityDao();
-				String city_id = request.getParameter("city_id");
 				int year = Integer.parseInt(yearStr);
 				int month = Integer.parseInt(monthStr);
 				ArrayList<CovidStatusCityDto> list = dao.city_list(city_id, year, month);
 
-				for (CovidStatusCityDto dto: list) {
+				for (CovidStatusCityDto dto : list) {
 		%>
-		<tr class="data_healing_count">
+		<tr class="data_healing_count showData">
 			<!-- 격리해제자 수 눌렀을 경우 -->
 			<td width="25%">
 				<!-- 한달간 데이터 중 수치만 나오게 하기 / 할 수 있으면 그래프 그리기 --> <span><%=dto.getName_ko()%></span>
 			</td>
 			<td width="50%" colspan="2"><span><%=dto.getHealing_count()%>명</span>
 			</td>
-			
-				<% boolean existedContent = dto.getTitle() != null; %>
-			
-			<td width="25%" id="date" <%= existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'": "" %> >
-				<span> <%=dto.getDate() %></span>
-				
-				<%
-					if (existedContent) {
-				%>
+
+			<%
+				boolean existedContent = dto.getTitle() != null;
+			%>
+
+			<td width="25%" id="date"
+				<%=existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'" : ""%>>
+				<span> <%=dto.getDate()%></span> <%
+ 	if (existedContent) {
+ %>
 				<div class="issueOn">
 					<h3>
 						<%=dto.getTitle()%></h3>
 					<p>
-						<%=dto.getDescription() %>
+						<%=dto.getDescription()%>
 					</p>
-					<span> <%=dto.getDate() %> </span>
-				</div>
-				<%
-					}
-				%>
+					<span> <%=dto.getDate()%>
+					</span>
+				</div> <%
+ 	}
+ %>
+			
 		</tr>
 		<%
 			}
@@ -413,40 +432,43 @@
 		</tr>
 		<%
 			CovidStatusCityDao dao = new CovidStatusCityDao();
-				String city_id = request.getParameter("city_id");
 				int year = Integer.parseInt(yearStr);
 				int month = Integer.parseInt(monthStr);
 				ArrayList<CovidStatusCityDto> list = dao.city_list(city_id, year, month);
 
-				for (CovidStatusCityDto dto: list) {
+				for (CovidStatusCityDto dto : list) {
 		%>
-		<tr class="data_deaths_count">
+		<tr class="data_deaths_count showData">
 			<!-- 사망자 수 눌렀을 경우-->
 			<td width="25%">
 				<!-- 한달간 데이터 중 수치만 나오게 하기 / 할 수 있으면 그래프 그리기 --> <span><%=dto.getName_ko()%></span>
 			</td>
 			<td width="50%" colspan="2"><span><%=dto.getDeaths_count()%>명</span>
 			</td>
-			
-				<% boolean existedContent = dto.getTitle() != null; %>
-			
-			<td width="25%" id="date" <%= existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'": "" %> >
-				<span> <%=dto.getDate() %></span>
-				
-				<%
-					if (existedContent) {
-				%>
+
+			<%
+				boolean existedContent = dto.getTitle() != null;
+			%>
+
+			<td width="25%" id="date"
+				<%=existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'" : ""%>>
+				<span> <%=dto.getDate()%></span> <%
+ 	if (existedContent) {
+ %>
 				<div class="issueOn">
 					<h3>
-						<%=dto.getTitle()%></h3>
+						<%=dto.getTitle()%></h3><br>
+						
 					<p>
-						<%=dto.getDescription() %>
-					</p>
-					<span> <%=dto.getDate() %> </span>
-				</div>
-				<%
-					}
-				%>
+						<%=dto.getDescription()%>
+					</p><br>
+					
+					<span> <%=dto.getDate()%>
+					</span>
+				</div> <%
+ 	}
+ %>
+			
 		</tr>
 		<%
 			}
@@ -464,41 +486,41 @@
 		</tr>
 		<%
 			CovidStatusCityDao dao = new CovidStatusCityDao();
-				String city_id = request.getParameter("city_id");
 				int year = Integer.parseInt(yearStr);
 				int month = Integer.parseInt(monthStr);
 				ArrayList<CovidStatusCityDto> list = dao.city_list(city_id, year, month);
 
-				for (CovidStatusCityDto dto: list) {
+				for (CovidStatusCityDto dto : list) {
 		%>
-		<tr class="data_infected_rate">
+		<tr class="data_infected_rate showData">
 			<!-- 감염률 눌렀을 경우 -->
 			<td width="25%">
 				<!-- 한달간 데이터 중 수치만 나오게 하기 / 할 수 있으면 그래프 그리기 --> <span> <%=dto.getName_ko()%></span>
 			</td>
 			<td width="50%" colspan="2"><span><%=dto.getInfected_rate()%>%</span>
 			</td>
-			
-				<% boolean existedContent = dto.getTitle() != null; %>
-			
-			<td width="25%" id="date" <%= existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'": "" %> >
-				<span> <%=dto.getDate() %></span>
-				
-				<%
-					if (existedContent) {
-				%>
+
+			<%
+				boolean existedContent = dto.getTitle() != null;
+			%>
+
+			<td width="25%" id="date"
+				<%=existedContent ? "onmouseover='showIssue(this)' onmouseout='hiddenIssue(this)'" : ""%>>
+				<span> <%=dto.getDate()%></span> <%
+ 	if (existedContent) {
+ %>
 				<div class="issueOn">
 					<h3>
 						<%=dto.getTitle()%></h3>
 					<p>
-						<%=dto.getDescription() %>
+						<%=dto.getDescription()%>
 					</p>
-					<span> <%=dto.getDate() %> </span>
-				</div>
-				<%
-					}
-				%>
-		
+					<span> <%=dto.getDate()%>
+					</span>
+				</div> <%
+ 	}
+ %>
+
 			</td>
 		</tr>
 

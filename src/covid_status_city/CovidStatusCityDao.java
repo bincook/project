@@ -42,10 +42,12 @@ public class CovidStatusCityDao {
 //		Order by covid.date asc
 
 		String sql = new StringBuilder()
-				.append("SELECT covid.*, city.* ")
+				.append("SELECT covid.*, city.*, korea.name_ko ")
 				.append("FROM `covid status by city` covid ")
-				.append("left JOIN (SELECT city.*, iss.title, iss.description, iss.occurrence_date FROM `korea city` city inner JOIN `issue` iss USING(city_id) WHERE iss.city_id = ? ) city ")
+				.append("left JOIN (SELECT iss.title, iss.description, iss.occurrence_date FROM `korea city` city inner JOIN `issue` iss USING(city_id) WHERE iss.city_id = ? ) city ")
 				.append("on covid.date = city.occurrence_date ")
+				.append("INNER JOIN `korea city` korea ")
+				.append("ON covid.city_id = korea.city_id ")
 				.append("WHERE ? <= covid.date and covid.date < ? and covid.city_id = ? ")
 				.append("Order by covid.date asc")
 				.toString()

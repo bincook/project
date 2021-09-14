@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<%@ page import="covid_status_city.covid_status_cityDao" %>
-<%@ page import="covid_status_city.covid_status_cityDto" %>
+<%@ page import="covid_status_city.CovidStatusCityDao" %>
+<%@ page import="covid_status_city.CovidStatusCityDto" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
@@ -74,8 +74,8 @@ function get_date1(n){
 		int year = Integer.parseInt(yearStr);
 		int month = Integer.parseInt(monthStr);
 		
-		covid_status_cityDao dao = new covid_status_cityDao();
-		ArrayList<covid_status_cityDto> list = dao.issue_list(year, month);
+		CovidStatusCityDao dao = new CovidStatusCityDao();
+		ArrayList<CovidStatusCityDto> list = dao.issue_list(year, month);
 %>
   <tr>
     <th> ³¯Â¥</th>
