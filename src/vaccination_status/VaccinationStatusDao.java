@@ -42,8 +42,14 @@ public class VaccinationStatusDao {
 			dto.setPopulation_count(rs.getInt("population_count"));
 
 			list.add(dto);
+			
+			
 
 		}
+		
+		stmt.close();
+		conn.close();
+
 		return list;
 
 	}
