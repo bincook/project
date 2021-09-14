@@ -1,11 +1,15 @@
 package sign;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+
 
 public class sign {
 	
@@ -13,11 +17,9 @@ public class sign {
 	String user_pwd = "1234";
 	String host = "26.168.126.112";
 	String port = "3306";
-	String database = "test";
+	String database = "guro_project_1";
 	Connection conn;
-	
-	public int userid_check(HttpServletRequest request) throws Exception
-	{}
+
 	
 	public void insert_user_info(signDto signD) throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -28,6 +30,7 @@ public class sign {
 		PreparedStatement p1 = conn.prepareStatement(sql);
 		p1.setString(1, signD.getEmail());
 		p1.setString(2, signD.getPassword());
+		
 		p1.executeUpdate();
 		p1.close();conn.close();
 	}
@@ -39,17 +42,35 @@ public class sign {
 		
 		String sql = "select * from member where email = ? and password = ?";
 		
+
 		PreparedStatement p1 = conn.prepareStatement(sql);
+
 		p1.setString(1, signD.getEmail());
 		p1.setString(2, signD.getPassword());
+		
 		ResultSet rs = p1.executeQuery();
+
 		if(rs.next()) {
+			
+			if ("Y".equals(rs.getString("admin"))) {
+		        session.setAttribute("isAdmin", true);
+			} else {
+				session.setAttribute("isAdmin", false);
+			}
+			
+			session.setAttribute("member_id", rs.getInt("member_id"));
 			session.setAttribute("email", rs.getString("email"));
 			
-			response.sendRedirect("sign-in.jsp");
+			response.sendRedirect("/");
 		}
 		else {
 			response.sendRedirect("sign-in.jsp");
 		}
 	}
+	
+	public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+		session.invalidate();
+		response.sendRedirect("/");
+	}
+	
 }

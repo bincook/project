@@ -11,9 +11,70 @@ public class CoronaDto {
 	deaths_count_cha,examine_count_cha;
 	
 	private String accumulated_infected_rate,date;
+	
+	//국내현황 7일치
+	private int one,two,three,four,five,six,seven;
+	
+	
 
 	
 	
+	public int getOne() {
+		return one;
+	}
+
+	public void setOne(int one) {
+		this.one = one;
+	}
+
+	public int getTwo() {
+		return two;
+	}
+
+	public void setTwo(int two) {
+		this.two = two;
+	}
+
+	public int getThree() {
+		return three;
+	}
+
+	public void setThree(int three) {
+		this.three = three;
+	}
+
+	public int getFour() {
+		return four;
+	}
+
+	public void setFour(int four) {
+		this.four = four;
+	}
+
+	public int getFive() {
+		return five;
+	}
+
+	public void setFive(int five) {
+		this.five = five;
+	}
+
+	public int getSix() {
+		return six;
+	}
+
+	public void setSix(int six) {
+		this.six = six;
+	}
+
+	public int getSeven() {
+		return seven;
+	}
+
+	public void setSeven(int seven) {
+		this.seven = seven;
+	}
+
 	public int getInfected_count_cha() {
 		return infected_count_cha;
 	}
