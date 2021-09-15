@@ -11,5 +11,5 @@
 	sign sign = new sign();
 	sign.insert_user_info(signD);
 	
-	response.sendRedirect("sign-in.jsp");
+	response.sendRedirect("/");
 %>
